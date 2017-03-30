@@ -3,7 +3,9 @@ package com.liveco.gateway.constant.command;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum IrrigationSystemCommand {
+import com.liveco.gateway.constant.ICommand;
+
+public enum IrrigationSystemCommand implements ICommand{
 
 	MANUAL((byte)1, "MANUAL"),
 	SEMI_AUTOMATIC((byte)2, "SEMI_AUTOMATIC"),
@@ -37,7 +39,7 @@ public enum IrrigationSystemCommand {
 		return lookup.get(name);
 	}
 
-	public static byte getValue(String name){
+	public static byte getValueByName(String name){
 		return lookup.get(name).getValue();
 	}			
 	

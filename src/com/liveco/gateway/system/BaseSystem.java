@@ -1,8 +1,12 @@
 package com.liveco.gateway.system;
 
+import com.liveco.gateway.constant.HydroponicsConstant;
+import com.liveco.gateway.constant.ICommand;
+import com.liveco.gateway.mqtt.MqttCommand;
 import com.liveco.gateway.plc.ADSConnection;
 import com.liveco.gateway.plc.AdsException;
 import com.liveco.gateway.plc.AdsListener;
+import com.liveco.gateway.plc.DeviceTypeException;
 
 import de.beckhoff.jni.AdsConstants;
 import de.beckhoff.jni.JNILong;
@@ -106,7 +110,117 @@ public class BaseSystem {
 		return this.ads;
 	}
 	
+	public int getTableOffset(){
+		return -1000;
+	}
+
+	public void test111(){
+		System.out.println( this.getTableOffset()  );
+	}
 	
 
- 	
+
+	public byte getTableFieldOffset(String type , int id){
+		return (byte)0;
+	}	
+
+	public byte getTableFieldOffset(String name){
+		return (byte)0;
+	}
+	
+	public byte getTableFieldNumberOfByte(String name){
+		return (byte)0;
+	}
+	
+	public long getSensorAddress(String type, int id) throws AdsException{
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(type, id);
+		return address;
+	}
+	
+	
+	/*  access device  */
+	public void accessDeviceControl(String type, int id, ICommand command ) throws AdsException{
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(type, id);
+		byte values[] = {command.getValue()};
+		this.writeByteArray(address, values);	
+	}
+
+	public void accessDeviceControl(String name, byte values[] ) throws AdsException{
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(name);
+		this.writeByteArray(address, values);
+	}
+
+	public void accessDeviceControl(int offset, ICommand command ) throws AdsException{
+		long address = this.getBaseAddress() + offset;
+		byte values[] = {command.getValue()};
+		this.writeByteArray(address, values);
+	}
+	
+	
+	public byte[] accessDeviceStatus(String type, int id) throws AdsException{
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(type, id) + 1;
+		return this.readByteArray(address, 1);
+	}	
+
+	public byte[] accessDeviceStatus(String type) throws AdsException{
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(type) + 1;
+		return this.readByteArray(address, 1);
+	}	
+	
+	public byte[] accessDeviceStatus(String type, int id , int offset, int length) throws AdsException{
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(type, id) + offset;
+		return this.readByteArray(address, length);
+	}
+	
+	
+	
+	
+	/*   
+	 "config.mode"    "config.fill"   
+	 */
+	public void configMode(String name, ICommand command) throws AdsException{
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(name);
+		byte values[] = {command.getValue()};
+		this.writeByteArray(address, values);
+	}
+	
+	public byte[] getModeStatus(String name, int numberOfBytes) throws AdsException{
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(name) + 1;
+		return this.readByteArray(address, numberOfBytes);		
+	}
+	
+	/*
+	 *   "config.attr"
+	 */
+	public void configAttribute(String name, int value){
+		long address = this.getBaseAddress() + (long)HydroponicsConstant.Table.getOffset(name);
+		long number = this.getBaseAddress() + (long)HydroponicsConstant.Table.getNumber(name);
+		
+	}
+
+	public int getAttributedStatus(String name){
+		long address = this.getBaseAddress() + (long)HydroponicsConstant.Table.getOffset(name) + 1;
+		long number = this.getBaseAddress() + (long)HydroponicsConstant.Table.getNumber(name);
+		return 0;	
+	}	
+	
+	public int getAttributedStatus(String name, int offset){
+		long address = this.getBaseAddress() + (long)HydroponicsConstant.Table.getOffset(name) + offset;
+		long number = this.getBaseAddress() + (long)HydroponicsConstant.Table.getNumber(name);
+		return 0;	
+	}	
+	
+
+	
+	
+	public void parseCommand(MqttCommand webcommand) throws AdsException, DeviceTypeException{
+
+		System.out.println("basesystem parseCommand");
+	}
+	
+	public void parseState(MqttCommand webcommand) throws AdsException, DeviceTypeException{
+		System.out.println("basesystem parseState");
+
+	}	
+	
 }

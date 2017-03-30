@@ -6,6 +6,8 @@ import de.beckhoff.jni.tcads.AmsAddr;
 import de.beckhoff.jni.tcads.AdsCallDllFunction;
 import de.beckhoff.jni.tcads.AdsSymbolEntry;
 
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -623,40 +625,85 @@ public class Test {
  }
  */
   
-   public static void connectMQTT(){
+	   public static void connectMQTT(){
 
-       String topic        = "MQTT Examples";
-       String content      = "Message from MqttPublishSample";
-       int qos             = 2;
-       String broker       = "tcp://iot.eclipse.org:1883";
-       String clientId     = "JavaSample";
-       MemoryPersistence persistence = new MemoryPersistence();
+		   
+		   
+		    class MqttCommandCallback implements MqttCallback {
 
-       try {
-           MqttClient sampleClient = new MqttClient(broker, clientId, persistence);
-           MqttConnectOptions connOpts = new MqttConnectOptions();
-           connOpts.setCleanSession(true);
-           System.out.println("Connecting to broker: "+broker);
-           sampleClient.connect(connOpts);
-           System.out.println("Connected");
-           System.out.println("Publishing message: "+content);
-           MqttMessage message = new MqttMessage(content.getBytes());
-           message.setQos(qos);
-           sampleClient.publish(topic, message);
-           System.out.println("Message published");
-           sampleClient.disconnect();
-           System.out.println("Disconnected");
-           System.exit(0);
-       } catch(MqttException me) {
-           System.out.println("reason "+me.getReasonCode());
-           System.out.println("msg "+me.getMessage());
-           System.out.println("loc "+me.getLocalizedMessage());
-           System.out.println("cause "+me.getCause());
-           System.out.println("excep "+me);
-           me.printStackTrace();
-       }	   
-	   
-   } 
+		        private String lastCommand;
+
+		        @Override
+		        public void connectionLost (Throwable arg0)
+		        {
+		        }
+
+		        @Override
+		        public void deliveryComplete (IMqttDeliveryToken arg0)
+		        {
+		        }
+
+		        @Override
+		        public void messageArrived (String topic, MqttMessage message) throws Exception
+		        {
+		        	System.out.println(message.getPayload());
+
+		        }
+
+		        public String getLastCommand ()
+		        {
+		            return lastCommand;
+		        }
+
+		    }		   
+		   
+		   
+		   
+		   
+	       String topic        = "/device/plc/abc/system/hydroponics/1/command";
+	       String content      = "Message from MqttPublishSample";
+	       int qos             = 2;
+	       String broker       = "tcp://139.59.170.74:1883";
+	       String clientId     = "JavaSample";
+	       MemoryPersistence persistence = new MemoryPersistence();
+
+	       try {
+	           MqttClient client = new MqttClient(broker, clientId, persistence);
+	           
+	           MqttConnectOptions options = new MqttConnectOptions();
+	            options.setCleanSession(true);
+	            //options.setUserName(configuration.getMqttUsername());
+	            //options.setPassword(configuration.getMqttPassword().toCharArray());
+	            //options.setWill(configuration.getMqttTopicRoot() + MQTT_TOPIC_ONLINE, "0".getBytes(), 1, true);
+	               
+	     
+	           System.out.println("Connecting to broker: "+broker);
+	           client.connect(options);
+	           System.out.println("Connected");
+	           System.out.println("Publishing message: "+content);
+	           MqttMessage message = new MqttMessage(content.getBytes());
+	           message.setQos(qos);
+	           client.publish(topic, message);
+	           System.out.println("Message published");
+	           
+	           
+	           client.subscribe("/device/plc/abc/system/hydroponics/1/command");
+	           client.subscribe("/device/plc/abc/system/hydroponics/1/command");
+
+	           client.setCallback(new MqttCommandCallback());
+	           //client.disconnect();
+	           //System.out.println("Disconnected");
+	           //System.exit(0);
+	       } catch(MqttException me) {
+	           System.out.println("reason "+me.getReasonCode());
+	           System.out.println("msg "+me.getMessage());
+	           System.out.println("loc "+me.getLocalizedMessage());
+	           System.out.println("cause "+me.getCause());
+	           System.out.println("excep "+me);
+	           me.printStackTrace();
+	       }	   
+		   
+	   } 
     
     
     

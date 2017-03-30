@@ -1,4 +1,4 @@
-package com.liveco.gateway.constant.structure;
+package com.liveco.gateway.constant;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -3,7 +3,9 @@ package com.liveco.gateway.constant.command;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum OnOffCommand {
+import com.liveco.gateway.constant.ICommand;
+
+public enum OnOffCommand implements ICommand{
 
 	ON((byte)1),
 	OFF((byte)2);
@@ -30,8 +32,8 @@ public enum OnOffCommand {
 		return lookup.get(name);
 	}
 
-	public static byte getValue(String name){
+	public static byte getValueByName(String name){
 		return lookup.get(name).getValue();
-	}	
-	
+	}
+		
 }

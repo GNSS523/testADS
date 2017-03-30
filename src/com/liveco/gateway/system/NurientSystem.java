@@ -1,6 +1,9 @@
 package com.liveco.gateway.system;
 
-import com.liveco.gateway.constant.structure.SystemStructure;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+import com.liveco.gateway.constant.SystemStructure;
 import com.liveco.gateway.plc.ADSConnection;
 import com.liveco.gateway.plc.AdsException;
 import com.liveco.gateway.plc.AdsListener;
@@ -10,6 +13,8 @@ import de.beckhoff.jni.tcads.AdsCallbackObject;
 
 public class NurientSystem  extends BaseSystem{
 
+    private static final Logger LOG = LogManager.getLogger(NurientSystem.class);
+	
 	public static final String type = SystemStructure.NUTRIENT_SYSTEM.getSymbol();
 	
 	public NurientSystem(ADSConnection ads, int index, String system_id){
@@ -24,10 +29,35 @@ public class NurientSystem  extends BaseSystem{
 		super(ads,index, system_id,base_address,array);
 	}
 	
-	public void configMode(byte mode){
+
+
+	
+	
+	
+	
+	
+	
+	
 		
+	
+	/*************** subscribe to the PH sensor  
+	 * 
+	 * subscribeToPH(1 )
+	 * unsubscribeToPH(1)
+	 * 
+	 * *************/	
+
+	public void subscribeToPH(int id) throws AdsException{
+		
+		long address = this.getSensorAddress("sensor.PH", id);
+		this.createPHNotification(address);
 	}
 	
+	public void unsubscribeToPH(int id) throws AdsException{
+		
+		long address = this.getSensorAddress("sensor.PH", id);
+		this.deletePHNotification();
+	}	
 	
 	AdsCallbackObject PHObject;
 	AdsListener PHlistener = new AdsListener();
@@ -44,6 +74,25 @@ public class NurientSystem  extends BaseSystem{
         // Delete listener
 		PHObject.removeListenerCallbackAdsState(PHlistener);
         getADSConnection().deleteNotification(PHNotification);
+	}	
+
+	/*************** subscribe to the EC sensor  
+	 * 
+	 * subscribeToEC(1 )
+	 * unsubscribeToEC(1)
+	 * 
+	 * *************/	
+
+	public void subscribeToEC(int id) throws AdsException{
+		
+		long address = this.getSensorAddress("sensor.EC", id);
+		this.createECNotification(address);
+	}
+	
+	public void unsubscribeToEC(int id) throws AdsException{
+		
+		long address = this.getSensorAddress("sensor.EC", id);
+		this.deleteECNotification();
 	}	
 	
 	AdsCallbackObject ECObject;
