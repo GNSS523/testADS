@@ -3,8 +3,10 @@ package com.liveco.gateway.system;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.liveco.gateway.constant.ICommand;
 import com.liveco.gateway.constant.PanelLightingConstant;
 import com.liveco.gateway.constant.SystemStructure;
+import com.liveco.gateway.mqtt.MqttCommand;
 import com.liveco.gateway.plc.ADSConnection;
 import com.liveco.gateway.plc.AdsException;
 import com.liveco.gateway.plc.DeviceTypeException;
@@ -86,5 +88,38 @@ public class PanelLightingSystem extends BaseSystem{
 		// 组合成json
 		
 	}	
+
+	
+	/***************  Light Control and Status 
+	 * 
+	 *   parse the web json into the command or status
+	 * 
+	 * *************/	
+	
+	public void parseCommand(MqttCommand webcommand) throws AdsException, DeviceTypeException{
+		ICommand cmd = null;
+		
+		String type = webcommand.getType();
+		String command = webcommand.getValue();
+		String long_name = webcommand.getName();
+		
+		int id;
+		String name;
+		
+		LOG.debug("PanelLightingSystem parseCommand  "+type+"  "+command+"  "+long_name);
+		/*
+		switch(type){
+			case "device":
+				String parts[] = long_name.split(".");
+				String channel = parts[3];
+				System.out.println(    "Type:"+name  +"    Command:"+ channel    );			
+				this.setIntensityOnColor(  channel, Integer.parseInt(command));
+			break;					
+		}
+		*/
+	}	
+	
+	
+	
 	
 }

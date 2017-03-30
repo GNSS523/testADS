@@ -103,9 +103,9 @@ public class CO2SystemConstant {
 		
 		VALVE(              (byte)2, (byte)2 , "actuator.valve",   "in valve", (byte)1),
 		CO2     (           (byte)2, (byte)4 , "sensor.CO2",       "CO2 sensor", (byte)1),
-		CONFIG_MODE(        (byte)6, (byte)2,  "config.set.mode"   ,   "config the mode", (byte)-1),
-		CO2_LOWER_LIMIT(    (byte)8, (byte)4,  "config.attr.CO2.threshold.low"   ,   "config the attribute", (byte)-1),
-		CO2_HIGHER_LIMIT(   (byte)12, (byte)4, "config.attr.CO2.threshold.high"   ,   "config the attribute", (byte)-1);
+		CONFIG_MODE(        (byte)6, (byte)2,  "config.mode"   ,   "config the mode", (byte)-1),
+		CO2_LOWER_LIMIT(    (byte)8, (byte)4,  "attribute.CO2.threshold.low"   ,   "config the attribute", (byte)-1),
+		CO2_HIGHER_LIMIT(   (byte)12, (byte)4, "attribute.CO2.threshold.high"   ,   "config the attribute", (byte)-1);
 				
 		private final byte offset;
 		private final byte number;

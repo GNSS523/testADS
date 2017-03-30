@@ -3,6 +3,7 @@ package com.liveco.gateway.system;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.liveco.gateway.constant.NutrientSystemConstant;
 import com.liveco.gateway.constant.SystemStructure;
 import com.liveco.gateway.plc.ADSConnection;
 import com.liveco.gateway.plc.AdsException;
@@ -30,7 +31,17 @@ public class NurientSystem  extends BaseSystem{
 	}
 	
 
-
+	public byte getTableFieldOffset(String type, int id){
+		return NutrientSystemConstant.Table.getOffset(type,id);
+	}
+	
+	public byte getTableFieldOffset(String name){
+		return NutrientSystemConstant.Table.getOffset(name);
+	}	
+	
+	public byte getTableFieldNumberOfByte(String name){
+		return NutrientSystemConstant.Table.getNumber(name);
+	}
 	
 	
 	

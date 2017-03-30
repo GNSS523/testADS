@@ -4,8 +4,11 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.liveco.gateway.constant.CO2SystemConstant;
+import com.liveco.gateway.constant.HydroponicsConstant;
+import com.liveco.gateway.constant.ICommand;
 import com.liveco.gateway.constant.OnOffActuatorConstant;
 import com.liveco.gateway.constant.SystemStructure;
+import com.liveco.gateway.mqtt.MqttCommand;
 import com.liveco.gateway.plc.ADSConnection;
 import com.liveco.gateway.plc.AdsException;
 import com.liveco.gateway.plc.AdsListener;
@@ -34,6 +37,107 @@ public class CO2System extends BaseSystem {
 	
 
 	
+	public byte getTableFieldOffset(String type, int id){
+		return CO2SystemConstant.Table.getOffset(type,id);
+	}
+	
+	public byte getTableFieldOffset(String name){
+		return CO2SystemConstant.Table.getOffset(name);
+	}	
+	
+	public byte getTableFieldNumberOfByte(String name){
+		return CO2SystemConstant.Table.getNumber(name);
+	}	
+	
+	/***************  Pump, Valve Control and Status 
+	 * 
+	 *   parse the web json into the command or status
+	 * 
+	 * *************/	
+	
+	public void parseCommand(MqttCommand webcommand) throws AdsException, DeviceTypeException{
+		ICommand cmd = null;
+		
+		String type = webcommand.getType();
+		String command = webcommand.getValue();
+		String long_name = webcommand.getName();
+		
+		int id;
+		String name;
+		
+		LOG.debug("CO2System parseCommand  "+type+"  "+command+"  "+long_name);
+		/*
+		switch(type){
+			case "device": 
+				// 
+				cmd = OnOffActuatorConstant.Command.get(command);			
+				String parts[] = long_name.split(".");
+				id = Integer.parseInt(parts[3]);
+				name = parts[1]+'.'+parts[2];
+				System.out.println(    "Type:"+name  +"    Command:"+ id    );			
+				this.setControl(  name, id  ,  (OnOffActuatorConstant.Command)cmd);
+				break;
+				
+			case "attribute": 
+				// CO2.threshold.low, CO2.threshold.high
+				name = type+"."+long_name;
+				this.setAttribute( name , Integer.parseInt(command) );
+				break;
+				
+			case "mode": 
+				// MANUAL, AUTOMATIC
+				cmd = CO2SystemConstant.ModeCommand.get(command);
+				name = type;
+				this.setMode(name, (CO2SystemConstant.ModeCommand)cmd);
+				break;
+						
+		}
+		*/
+	}	
+	
+
+	public void parseState(MqttCommand webcommand) throws AdsException, DeviceTypeException{
+
+		String type = webcommand.getType();
+		String command = webcommand.getValue();
+		String long_name = webcommand.getName();
+
+		int id;
+		String name;
+
+		LOG.debug("CO2System parseState  "+type+"  "+command+"  "+long_name);
+		
+		/*
+		switch(type){
+		
+			case "device":
+				String parts[] = long_name.split(".");
+				id = Integer.parseInt(parts[3]);
+				name = parts[1]+'.'+parts[2];
+				System.out.println(    "Type:"+name  +"    Command:"+ id    );
+				this.getControlStatus(type, id);
+				break;
+								
+			case "mode":
+				this.getMode(type); 
+				System.out.println(" get the mode  : ");
+				break;
+				
+			case "attribute":
+				name = type;				
+				this.getAttributedStatus(name);
+				System.out.println(" get the attribute  : ");
+				break;
+				
+			case "config":
+				name = type+"."+long_name;				
+				this.getFillReplyStatus(name);
+				System.out.println(" get the command ack  : ");
+				break;
+		}
+		*/		
+	}	
+	
 	
 	/***************   Valve Control and Status 
 	 * 
@@ -56,21 +160,14 @@ public class CO2System extends BaseSystem {
 	
 	// 
 	private void setControl(String type, int id, OnOffActuatorConstant.Command command) throws AdsException, DeviceTypeException{
-		if( type == "actuator.valve"){
-			this.accessDeviceControl(type, id, command);
-		}else{
-			throw new DeviceTypeException(""); 
-		}
+		this.accessDeviceControl(type, id, command);
 	}
 	
 	// 
 	public String getControlStatus(String type, int id) throws AdsException, DeviceTypeException{
-		if(type == "actuator.valve"){
-			byte value = this.accessDeviceStatus(type, id, 1,1)[0];
-			return OnOffActuatorConstant.State.getName(value);
-		}else{
-			throw new DeviceTypeException(""); 
-		}
+		byte value = this.accessDeviceStatus(type, id, 1,1)[0];
+		return OnOffActuatorConstant.State.getName(value);
+
 	}	
 	
 
@@ -83,12 +180,7 @@ public class CO2System extends BaseSystem {
 		
 	// 
 	public void setMode(String name, CO2SystemConstant.ModeCommand command) throws AdsException{
-		if(name == "config.mode" ){
-			this.configMode(name, command);
-		}else{
-			 
-
-		}
+		this.configMode(name, command);
 	}
 	// 
 	public String getMode(String name) throws AdsException{
@@ -106,8 +198,7 @@ public class CO2System extends BaseSystem {
 		
 	//     
 	private void setAttribute(String type,  int value) throws AdsException{
-		if(type.startsWith("config.attr"))
-			this.configAttribute( type , value  );
+		this.configAttribute( type , value  );
 	}
 	
 	// getAttribute("config.attr.CO2.threshold")

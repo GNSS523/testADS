@@ -4,8 +4,11 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.liveco.gateway.constant.AirConditionerConstant;
+import com.liveco.gateway.constant.HydroponicsConstant;
+import com.liveco.gateway.constant.ICommand;
 import com.liveco.gateway.constant.OnOffActuatorConstant;
 import com.liveco.gateway.constant.SystemStructure;
+import com.liveco.gateway.mqtt.MqttCommand;
 import com.liveco.gateway.plc.ADSConnection;
 import com.liveco.gateway.plc.AdsException;
 import com.liveco.gateway.plc.AdsListener;
@@ -33,6 +36,90 @@ public class AirConditioner extends BaseSystem{
 	public AirConditioner(ADSConnection ads, int index, String system_id, long base_address, byte array[]){
 		super(ads,index, system_id,base_address,array);
 	}
+
+
+	
+	public byte getTableFieldOffset(String type, int id){
+		return AirConditionerConstant.Table.getOffset(type,id);
+	}
+	
+	public byte getTableFieldOffset(String name){
+		return AirConditionerConstant.Table.getOffset(name);
+	}	
+	
+	public byte getTableFieldNumberOfByte(String name){
+		return AirConditionerConstant.Table.getNumber(name);
+	}	
+	
+	/***************  Pump, Valve Control and Status 
+	 * 
+	 *   parse the web json into the command or status
+	 * 
+	 * *************/	
+	
+	public void parseCommand(MqttCommand webcommand) throws AdsException, DeviceTypeException{
+		ICommand cmd = null;
+		
+		String type = webcommand.getType();
+		String command = webcommand.getValue();
+		String long_name = webcommand.getName();
+		
+		int id;
+		String name;
+		
+		LOG.debug("AirConditioner parseCommand  "+type+"  "+command+"  "+long_name);
+		/*
+		switch(type){
+				
+			case "attribute":
+				name = type+"."+long_name;
+				this.setAttribute( name , Integer.parseInt(command) );
+				break;
+				
+			case "mode":
+				cmd = HydroponicsConstant.ModeCommand.get(command);
+				name = type;
+				this.setMode(name, (HydroponicsConstant.ModeCommand)cmd);
+				break;
+				
+			
+		}
+		*/
+	}	
+	
+	public void parseState(MqttCommand webcommand) throws AdsException, DeviceTypeException{
+
+		String type = webcommand.getType();
+		String command = webcommand.getValue();
+		String long_name = webcommand.getName();
+
+		int id;
+		String name;
+
+		LOG.debug("AirConditioner parseState  "+type+"  "+command+"  "+long_name);
+		
+		/*
+		switch(type){
+								
+			case "mode":
+				this.getMode(type); 
+				System.out.println(" get the mode  : ");
+				break;
+				
+			case "attribute":
+				name = type;				
+				this.getAttributedStatus(name);
+				System.out.println(" get the attribute  : ");
+				break;
+				
+		}
+		*/		
+	}
+	
+	
+	
+	
+	
 	
 	public void open(String type) throws AdsException{
 		this.setControl(type, AirConditionerConstant.Command.ON);
