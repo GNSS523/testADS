@@ -61,7 +61,6 @@ public class MqttCommandCallback implements MqttCallback {
     	//LOG.debug(plc_id+" "+system_type+" "+system_id+" "+command_type);
     	    
     	MqttCommand webcommand = this.parseContent(message);
-    	
     	BaseSystem system;
     	try{
     		system = this.system_repository.findSystem(system_type, Integer.parseInt(system_id));
@@ -78,7 +77,6 @@ public class MqttCommandCallback implements MqttCallback {
     	}catch(IndexOutOfBoundsException error){
     		LOG.error("System not found "+error);
     	}
-    	   
     }
     
     public MqttCommand parseContent(MqttMessage message){

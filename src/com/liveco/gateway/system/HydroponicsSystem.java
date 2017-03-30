@@ -81,7 +81,6 @@ public class HydroponicsSystem extends BaseSystem{
 		String name;
 		
 		LOG.debug("Hydroponics parseCommand  "+type+"  "+command+"  "+long_name);
-		
 		/*
 		switch(type){
 			case "device":
@@ -111,7 +110,6 @@ public class HydroponicsSystem extends BaseSystem{
 				break;			
 		}
 		*/
-		
 	}
 	
 	public void parseState(MqttCommand webcommand) throws AdsException, DeviceTypeException{
