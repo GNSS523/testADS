@@ -3,7 +3,6 @@ package com.liveco.gateway.constant;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class CO2SystemConstant {
 
 	public enum ModeCommand  implements ICommand{
