@@ -8,16 +8,21 @@ public class HydroponicsConstant extends IrrigationSystemConstant{
 	public enum Table{
 
 		/*
-	    stPump:ST_PumpOrValve;
-		stValveIn:ST_PumpOrValve;
-		stValveOut:ST_PumpOrValve;
-		
-		byHMICmd:BYTE;          //Cmd:=1_Manual;=2_Config;=4_Work;=8_Clean Up;=16_Fill in��=32_check
-		byHMIStatus:BYTE;       //Status:=1_Manual;=2_Config;=4_Work;=8_Clean up;=16_Fill in;=32_check
-		byRequestFill:BYTE;    //=1 request
-		byAgreeFill:BYTE;      //=1 agree
-		iPumpRunTime:INT;      //minute
-		iPumpStopTime:INT;     //minute
+TYPE ST_SingleCircSysInterface :
+STRUCT
+	stPump:ST_PumpOrValueInterfacs;
+	stSVIn:ST_PumpOrValueInterfacs;
+	stSVOut:ST_PumpOrValueInterfacs;
+	
+	byHMICmd:BYTE;          //Cmd:=1_Manual;=2_Config;=4_Work;=8_Clean Up;=16_Fill in；=32_check
+	byHMIStatus:BYTE;       //Status:=1_Manual;=2_Config;=4_Work;=8_Clean up;=16_Fill in;=32_check
+	byWaterTankLevel:BYTE; //bit 3=1:HH(highest level);bit 2:H(high level);bit 1:L(low level);bit 0(lowwest level)
+	byRequestFill:BYTE;    //=1 request
+	byAgreeFill:BYTE;      //=1 agree
+	iPumpRunTime:INT;      //minute
+	iPumpStopTime:INT;     //minute
+END_STRUCT
+END_TYPE
 		 */	
 		
 		PUMP(                  (byte)0, (byte)2,  "actuator.pump",    "pump"    , (byte)1),

@@ -5,6 +5,26 @@ import java.util.Map;
 
 public class AirConditionerConstant {
 
+/*
+ * 
+TYPE ST_IndoorCondition :
+STRUCT
+	wOperationCommand:WORD;//=1,write setting value
+    wOperationMode:WORD;//bit0-sleep;1-swing on;2-indoor mode locked;bit8-off;bit9-cool;bit10-dry;bit11-ventilation;bit12-heat
+	wFanOperationMode:WORD;//indoor fan:8-off;9-low speed;10-mid speed;11-high speed;12-auto
+	wSetTemperature:WORD;//
+	
+	wActualMode:WORD;//bit0-off;bit1-cool;bit2-dry;bit3-ventilation;bit4-heat
+	wActualSetTemperature:WORD;
+	wActualTemperature:WORD;
+	wActualWorkStatus:WORD;//bit0-sleep;1-swing on;2-indoor mode locked;3-normol;4-test;5-reset;6-defrosting;7-antifreez
+	wActualFaulty:WORD;//bit0-communication error between indoor unit and controller;1-entering coil temperature sensor error;2-leaving sensor error;3-ambient sensor eoor;4-water level switch warning;5-mid sensor error;6-sensor misconection or motor error
+	                  
+END_STRUCT
+END_TYPE
+ * 	
+ */
+	
 	public enum Command implements ICommand{
 		
 		ON((byte)1),
