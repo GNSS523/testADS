@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82750581-e635-4734-a804-67b1aecb885b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/liveco/gateway/ui/FogponicsSystemUI.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/liveco/gateway/ui/HydroponicsSystemUI.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/liveco/gateway/ui/PaneLightingSystemUI.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/liveco/gateway/ui/ShelfLightingSystemUI.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
@@ -20,15 +20,13 @@
       <file leaf-file-name="CO2SystemUI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/ui/CO2SystemUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="156" column="0" lean-forward="false" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
+            <state relative-caret-position="371">
+              <caret line="78" column="11" lean-forward="false" selection-start-line="78" selection-start-column="11" selection-end-line="78" selection-end-column="11" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#CO2SystemUI#0;class#CO2SystemUI#0" expanded="false" />
                 <element signature="e#1113#1307#0" expanded="true" />
                 <element signature="e#1306#1307#0" expanded="true" />
-                <element signature="method#initGui#0;class#CO2SystemUI#0" expanded="false" />
-                <element signature="method#modeUI#0;class#CO2SystemUI#0" expanded="false" />
                 <element signature="e#1743#1751#0" expanded="true" />
                 <element signature="method#CO2SensorUI#0;class#CO2SystemUI#0" expanded="false" />
                 <element signature="e#5018#5019#0" expanded="true" />
@@ -40,11 +38,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FogponicsSystemUI.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="FogponicsSystemUI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/ui/FogponicsSystemUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="293" column="37" lean-forward="false" selection-start-line="293" selection-start-column="37" selection-end-line="293" selection-end-column="37" />
+            <state relative-caret-position="280">
+              <caret line="294" column="12" lean-forward="false" selection-start-line="294" selection-start-column="12" selection-end-line="294" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#main#0;class#FogponicsSystemUI#0" expanded="false" />
@@ -53,6 +51,36 @@
                 <element signature="e#2144#2145#0" expanded="true" />
                 <element signature="method#sensorUI#0;class#FogponicsSystemUI#0" expanded="false" />
                 <element signature="e#12113#12121#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PaneLightingSystemUI.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/ui/PaneLightingSystemUI.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="21" column="12" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#940#1134#0" expanded="true" />
+                <element signature="e#1133#1134#0" expanded="true" />
+                <element signature="e#1489#1497#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ShelfLightingSystemUI.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/ui/ShelfLightingSystemUI.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="440">
+              <caret line="97" column="41" lean-forward="true" selection-start-line="97" selection-start-column="41" selection-end-line="97" selection-end-column="41" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1028#1222#0" expanded="true" />
+                <element signature="e#1221#1222#0" expanded="true" />
+                <element signature="e#1577#1585#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -104,6 +132,8 @@
         <option value="$PROJECT_DIR$/src/com/liveco/gateway/constant/HydroponicsConstant.java" />
         <option value="$PROJECT_DIR$/src/com/liveco/gateway/ui/HydroponicsSystemUI.java" />
         <option value="$PROJECT_DIR$/src/com/liveco/gateway/ui/FogponicsSystemUI.java" />
+        <option value="$PROJECT_DIR$/src/com/liveco/gateway/ui/PaneLightingSystemUI.java" />
+        <option value="$PROJECT_DIR$/src/com/liveco/gateway/ui/ShelfLightingSystemUI.java" />
       </list>
     </option>
   </component>
@@ -266,42 +296,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.FogponicsSystemUI">
-    <configuration default="false" name="Foo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="Foo" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="testADS" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="false" name="CO2System" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="com.liveco.gateway.system.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="com.liveco.gateway.system.CO2System" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="testADS" />
-      <envs />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Application.ShelfLightingSystemUI">
     <configuration default="false" name="CO2SystemUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -350,6 +345,46 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="com.liveco.gateway.ui.FogponicsSystemUI" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="testADS" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="PaneLightingSystemUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.liveco.gateway.ui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.liveco.gateway.ui.PaneLightingSystemUI" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="testADS" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ShelfLightingSystemUI" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.liveco.gateway.ui.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.liveco.gateway.ui.ShelfLightingSystemUI" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -567,19 +602,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Application.Foo" />
-      <item index="1" class="java.lang.String" itemvalue="Application.CO2System" />
-      <item index="2" class="java.lang.String" itemvalue="Application.CO2SystemUI" />
-      <item index="3" class="java.lang.String" itemvalue="Application.HydroponicsSystemUI" />
-      <item index="4" class="java.lang.String" itemvalue="Application.FogponicsSystemUI" />
+      <item index="0" class="java.lang.String" itemvalue="Application.CO2SystemUI" />
+      <item index="1" class="java.lang.String" itemvalue="Application.HydroponicsSystemUI" />
+      <item index="2" class="java.lang.String" itemvalue="Application.FogponicsSystemUI" />
+      <item index="3" class="java.lang.String" itemvalue="Application.PaneLightingSystemUI" />
+      <item index="4" class="java.lang.String" itemvalue="Application.ShelfLightingSystemUI" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.FogponicsSystemUI" />
-        <item index="1" class="java.lang.String" itemvalue="Application.HydroponicsSystemUI" />
-        <item index="2" class="java.lang.String" itemvalue="Application.CO2SystemUI" />
-        <item index="3" class="java.lang.String" itemvalue="Application.CO2System" />
-        <item index="4" class="java.lang.String" itemvalue="Application.Foo" />
+        <item index="0" class="java.lang.String" itemvalue="Application.ShelfLightingSystemUI" />
+        <item index="1" class="java.lang.String" itemvalue="Application.PaneLightingSystemUI" />
+        <item index="2" class="java.lang.String" itemvalue="Application.FogponicsSystemUI" />
+        <item index="3" class="java.lang.String" itemvalue="Application.HydroponicsSystemUI" />
+        <item index="4" class="java.lang.String" itemvalue="Application.CO2SystemUI" />
       </list>
     </recent_temporary>
   </component>
@@ -763,27 +798,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/ui/CO2SystemUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="156" column="0" lean-forward="false" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#CO2SystemUI#0;class#CO2SystemUI#0" expanded="false" />
-            <element signature="e#1113#1307#0" expanded="true" />
-            <element signature="e#1306#1307#0" expanded="true" />
-            <element signature="method#initGui#0;class#CO2SystemUI#0" expanded="false" />
-            <element signature="method#modeUI#0;class#CO2SystemUI#0" expanded="false" />
-            <element signature="e#1743#1751#0" expanded="true" />
-            <element signature="method#CO2SensorUI#0;class#CO2SystemUI#0" expanded="false" />
-            <element signature="e#5018#5019#0" expanded="true" />
-            <element signature="e#5095#5096#0" expanded="true" />
-            <element signature="e#5244#5245#0" expanded="true" />
-            <element signature="e#5321#5322#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/constant/HydroponicsConstant.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
@@ -880,8 +894,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/ui/FogponicsSystemUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="293" column="37" lean-forward="false" selection-start-line="293" selection-start-column="37" selection-end-line="293" selection-end-column="37" />
+        <state relative-caret-position="280">
+          <caret line="294" column="12" lean-forward="false" selection-start-line="294" selection-start-column="12" selection-end-line="294" selection-end-column="12" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#main#0;class#FogponicsSystemUI#0" expanded="false" />
@@ -890,6 +904,61 @@
             <element signature="e#2144#2145#0" expanded="true" />
             <element signature="method#sensorUI#0;class#FogponicsSystemUI#0" expanded="false" />
             <element signature="e#12113#12121#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/ui/CO2SystemUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="78" column="11" lean-forward="false" selection-start-line="78" selection-start-column="11" selection-end-line="78" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#CO2SystemUI#0;class#CO2SystemUI#0" expanded="false" />
+            <element signature="e#1113#1307#0" expanded="true" />
+            <element signature="e#1306#1307#0" expanded="true" />
+            <element signature="e#1743#1751#0" expanded="true" />
+            <element signature="method#CO2SensorUI#0;class#CO2SystemUI#0" expanded="false" />
+            <element signature="e#5018#5019#0" expanded="true" />
+            <element signature="e#5095#5096#0" expanded="true" />
+            <element signature="e#5244#5245#0" expanded="true" />
+            <element signature="e#5321#5322#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/constant/PanelLightingConstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="64" column="0" lean-forward="false" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+          <folding>
+            <element signature="e#1812#1813#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/ui/PaneLightingSystemUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="21" column="12" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#940#1134#0" expanded="true" />
+            <element signature="e#1133#1134#0" expanded="true" />
+            <element signature="e#1489#1497#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/ui/ShelfLightingSystemUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="97" column="41" lean-forward="true" selection-start-line="97" selection-start-column="41" selection-end-line="97" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1028#1222#0" expanded="true" />
+            <element signature="e#1221#1222#0" expanded="true" />
+            <element signature="e#1577#1585#0" expanded="true" />
           </folding>
         </state>
       </provider>
