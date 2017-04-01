@@ -8,16 +8,31 @@ public class NutrientSystemConstant {
 	public enum Table{
 
 		/*
-	    stPump:ST_PumpOrValve;
-		stValveIn:ST_PumpOrValve;
-		stValveOut:ST_PumpOrValve;
-		
-		byHMICmd:BYTE;          //Cmd:=1_Manual;=2_Config;=4_Work;=8_Clean Up;=16_Fill in��=32_check
-		byHMIStatus:BYTE;       //Status:=1_Manual;=2_Config;=4_Work;=8_Clean up;=16_Fill in;=32_check
-		byRequestFill:BYTE;    //=1 request
-		byAgreeFill:BYTE;      //=1 agree
-		iPumpRunTime:INT;      //minute
-		iPumpStopTime:INT;     //minute
+TYPE ST_Config :
+STRUCT
+	stRecipe:ST_LiquorRecipe;
+	stActual:ST_LiquorActual;
+	stPump:ST_PumpOrValueInterfacs;
+	stSV1:ST_PumpOrValueInterfacs;
+	stSV2:ST_PumpOrValueInterfacs;
+	stSV3:ST_PumpOrValueInterfacs;
+	stSV4:ST_PumpOrValueInterfacs;
+	stSV5:ST_PumpOrValueInterfacs;
+	stSV6:ST_PumpOrValueInterfacs;
+	stUGL1:ST_PumpOrValueInterfacs;
+	iConfigModeCmd	:INT;	//ConfigMode:=1Manual;=2Half Auto;=4:Auto
+	iConfigModeStatus:INT;	//ConfigMode:=1Manual;=2Half Auto;=4Auto
+	iConfigCommand:INT;//config Cmd：1-start config；2-stop；4-config OK
+	iConfigStatus:INT;//config status：1-ready；2-config run；4-config complete；8-config OK;16-trans；32-trans complete
+	byMeterPumpCmd	:BYTE;	//Meter Pump Cmd:=1_power on;=2_power off
+	byMeterPumpStatus	:BYTE;	//Meter Pump Status:=1_Power on
+	rPHActualValue	:REAL;	//PH actual value
+    rECActualValue	:REAL;	//EC actual value
+    rPEActualValue	:REAL;	//PE actual value
+	rPHCheckActualValue	:REAL;	//Check complete:PH  Actual Value
+    rECCheckActualValue	:REAL;	//Check complete:EC  Actual Value
+END_STRUCT
+END_TYPE
 		 */	
 		
 		PUMP(                  (byte)0, (byte)2,  "actuator.pump",    "pump"    , (byte)1),
