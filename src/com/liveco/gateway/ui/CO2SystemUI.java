@@ -1,12 +1,9 @@
-package com.liveco.gateway.com.liveco.gateway.ui;
+package com.liveco.gateway.ui;
 
 import com.liveco.gateway.constant.CO2SystemConstant;
-import com.liveco.gateway.plc.AdsException;
 import com.liveco.gateway.system.CO2System;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
