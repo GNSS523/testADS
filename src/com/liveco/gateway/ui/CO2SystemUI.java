@@ -4,6 +4,10 @@ import com.liveco.gateway.constant.CO2SystemConstant;
 import com.liveco.gateway.system.CO2System;
 
 import javax.swing.*;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -15,8 +19,13 @@ import java.util.Vector;
  * Created by halsn on 17-4-1.
  */
 public class CO2SystemUI extends JFrame{
-    private CO2System s;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3403675278480479931L;
+	private CO2System s;
     private JPanel jp;
+    private JLabel modeName;
     private JComboBox modeSelect;
     private JLabel valveName;
     private JLabel valvePLC;
@@ -31,7 +40,10 @@ public class CO2SystemUI extends JFrame{
 
     public static void main(String[] args) {
         // write your code here
-        CO2System s = new CO2System(null, 0, "af");
+ 	   	Logger logger = Logger.getLogger("com.liveco.gateway");
+ 	   	logger.setLevel(Level.DEBUG); 
+ 	   	
+    	CO2System s = new CO2System(null, 0, "af");
         new CO2SystemUI(s);
     }
 
@@ -77,6 +89,10 @@ public class CO2SystemUI extends JFrame{
                 setMode(mode);
             }
         });
+        modeName = new JLabel("Mode Name: ");
+        modeName.setBounds(50, 200, 300, 30);
+
+        getContentPane().add(modeName);
         getContentPane().add(modeSelect);
     }
 
