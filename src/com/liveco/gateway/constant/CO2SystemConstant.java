@@ -161,7 +161,6 @@ public class CO2SystemConstant {
 			return lookup.get(name+"_"+id).getType();
 		}	
 
-		
 		public static Table get(String name){
 			return lookup.get(name);
 		}

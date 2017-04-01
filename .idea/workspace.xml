@@ -2,29 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82750581-e635-4734-a804-67b1aecb885b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testADS.eml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testADS.iml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/.gitignore" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/Main.class" afterPath="$PROJECT_DIR$/bin/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/plc/ADSConnection.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/plc/ADSConnection.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/plc/AdsException.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/plc/AdsException.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/plc/AdsListener.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/plc/AdsListener.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/plc/PlcException.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/plc/PlcException.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/system/AirConditioner.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/system/AirConditioner.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/system/BaseSystem.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/system/BaseSystem.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/system/CO2System.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/system/CO2System.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/system/HydroponicsSystem.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/system/HydroponicsSystem.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/system/NurientSystem.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/system/NurientSystem.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/system/PanelLightingSystem.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/system/PanelLightingSystem.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/system/ShelfLightingSystem.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/system/ShelfLightingSystem.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/testADS/Test$1MqttCommandCallback.class" afterPath="$PROJECT_DIR$/bin/testADS/Test$1MqttCommandCallback.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/testADS/Test.class" afterPath="$PROJECT_DIR$/bin/testADS/Test.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.classpath" afterPath="$PROJECT_DIR$/.classpath" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.project" afterPath="$PROJECT_DIR$/.project" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/liveco/gateway/com/liveco/gateway/ui/CO2SystemUI.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/constant/CO2SystemConstant$Table.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/constant/CO2SystemConstant$Table.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/liveco/gateway/constant/CO2SystemConstant$Value.class" afterPath="$PROJECT_DIR$/bin/com/liveco/gateway/constant/CO2SystemConstant$Value.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/liveco/gateway/constant/CO2SystemConstant.java" afterPath="$PROJECT_DIR$/src/com/liveco/gateway/constant/CO2SystemConstant.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/liveco/gateway/system/CO2System.java" afterPath="$PROJECT_DIR$/src/com/liveco/gateway/system/CO2System.java" />
     </list>
@@ -59,30 +40,22 @@
       <file leaf-file-name="CO2System.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/system/CO2System.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-218">
-              <caret line="77" column="32" lean-forward="false" selection-start-line="77" selection-start-column="32" selection-end-line="77" selection-end-column="32" />
+            <state relative-caret-position="480">
+              <caret line="246" column="0" lean-forward="false" selection-start-line="246" selection-start-column="0" selection-end-line="246" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#main#0;class#CO2System#0" expanded="false" />
-                <element signature="e#1626#1826#0" expanded="true" />
-                <element signature="e#1825#1826#0" expanded="true" />
-                <element signature="e#2112#2120#0" expanded="true" />
                 <element signature="method#CO2System#1;class#CO2System#0" expanded="false" />
                 <element signature="method#CO2System#2;class#CO2System#0" expanded="false" />
                 <element signature="method#parseCommand#0;class#CO2System#0" expanded="false" />
                 <element signature="method#parseState#0;class#CO2System#0" expanded="false" />
-                <element signature="docComment;method#open#0;class#CO2System#0" expanded="false" />
                 <element signature="method#open#0;class#CO2System#0" expanded="false" />
                 <element signature="method#close#0;class#CO2System#0" expanded="false" />
                 <element signature="method#setControl#0;class#CO2System#0" expanded="false" />
                 <element signature="method#getControlStatus#0;class#CO2System#0" expanded="false" />
-                <element signature="docComment;method#setMode#0;class#CO2System#0" expanded="false" />
                 <element signature="method#setMode#0;class#CO2System#0" expanded="false" />
                 <element signature="method#getMode#0;class#CO2System#0" expanded="false" />
-                <element signature="docComment;method#setAttribute#0;class#CO2System#0" expanded="false" />
                 <element signature="method#setAttribute#0;class#CO2System#0" expanded="false" />
                 <element signature="method#getAttribute#0;class#CO2System#0" expanded="false" />
-                <element signature="docComment;method#subscribeToCO2#0;class#CO2System#0" expanded="false" />
                 <element signature="method#subscribeToCO2#0;class#CO2System#0" expanded="false" />
                 <element signature="method#unsubscribeToCO2#0;class#CO2System#0" expanded="false" />
                 <element signature="method#createNotification#0;class#CO2System#0" expanded="false" />
@@ -92,17 +65,69 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="CO2SystemUI.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/com/liveco/gateway/ui/CO2SystemUI.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="220">
+              <caret line="90" column="14" lean-forward="true" selection-start-line="90" selection-start-column="14" selection-end-line="90" selection-end-column="14" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#886#1080#0" expanded="true" />
+                <element signature="e#1079#1080#0" expanded="true" />
+                <element signature="e#1356#1364#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HydroponicsConstant.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/constant/HydroponicsConstant.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="160">
+              <caret line="9" column="9" lean-forward="false" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-120">
+              <caret line="75" column="28" lean-forward="false" selection-start-line="75" selection-start-column="28" selection-end-line="75" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="CO2SystemConstant.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/constant/CO2SystemConstant.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="319">
-              <caret line="72" column="47" lean-forward="false" selection-start-line="72" selection-start-column="47" selection-end-line="72" selection-end-column="47" />
+            <state relative-caret-position="220">
+              <caret line="175" column="8" lean-forward="false" selection-start-line="175" selection-start-column="8" selection-end-line="175" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ICommand.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/constant/ICommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="40">
+              <caret line="2" column="17" lean-forward="false" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -116,6 +141,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/Foo.java" />
+        <option value="$PROJECT_DIR$/src/com/liveco/gateway/constant/CO2SystemConstant.java" />
+        <option value="$PROJECT_DIR$/src/com/liveco/gateway/com/liveco/gateway/ui/CO2SystemUI.java" />
         <option value="$PROJECT_DIR$/src/com/liveco/gateway/system/CO2System.java" />
       </list>
     </option>
@@ -209,28 +236,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="gateway" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="testADS" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="testADS" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gateway" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="constant" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -599,14 +604,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="41" column="13" lean-forward="false" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.classpath">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -631,14 +628,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/constant/CO2SystemConstant.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="72" column="47" lean-forward="false" selection-start-line="72" selection-start-column="47" selection-end-line="72" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Foo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="479">
@@ -654,32 +643,69 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/system/CO2System.java">
+    <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/constant/ICommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-218">
-          <caret line="77" column="32" lean-forward="false" selection-start-line="77" selection-start-column="32" selection-end-line="77" selection-end-column="32" />
+        <state relative-caret-position="40">
+          <caret line="2" column="17" lean-forward="false" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-120">
+          <caret line="75" column="28" lean-forward="false" selection-start-line="75" selection-start-column="28" selection-end-line="75" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/constant/HydroponicsConstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="9" column="9" lean-forward="false" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/constant/CO2SystemConstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="175" column="8" lean-forward="false" selection-start-line="175" selection-start-column="8" selection-end-line="175" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/com/liveco/gateway/ui/CO2SystemUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="90" column="14" lean-forward="true" selection-start-line="90" selection-start-column="14" selection-end-line="90" selection-end-column="14" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#main#0;class#CO2System#0" expanded="false" />
-            <element signature="e#1626#1826#0" expanded="true" />
-            <element signature="e#1825#1826#0" expanded="true" />
-            <element signature="e#2112#2120#0" expanded="true" />
+            <element signature="e#886#1080#0" expanded="true" />
+            <element signature="e#1079#1080#0" expanded="true" />
+            <element signature="e#1356#1364#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/liveco/gateway/system/CO2System.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="246" column="0" lean-forward="false" selection-start-line="246" selection-start-column="0" selection-end-line="246" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#CO2System#1;class#CO2System#0" expanded="false" />
             <element signature="method#CO2System#2;class#CO2System#0" expanded="false" />
             <element signature="method#parseCommand#0;class#CO2System#0" expanded="false" />
             <element signature="method#parseState#0;class#CO2System#0" expanded="false" />
-            <element signature="docComment;method#open#0;class#CO2System#0" expanded="false" />
             <element signature="method#open#0;class#CO2System#0" expanded="false" />
             <element signature="method#close#0;class#CO2System#0" expanded="false" />
             <element signature="method#setControl#0;class#CO2System#0" expanded="false" />
             <element signature="method#getControlStatus#0;class#CO2System#0" expanded="false" />
-            <element signature="docComment;method#setMode#0;class#CO2System#0" expanded="false" />
             <element signature="method#setMode#0;class#CO2System#0" expanded="false" />
             <element signature="method#getMode#0;class#CO2System#0" expanded="false" />
-            <element signature="docComment;method#setAttribute#0;class#CO2System#0" expanded="false" />
             <element signature="method#setAttribute#0;class#CO2System#0" expanded="false" />
             <element signature="method#getAttribute#0;class#CO2System#0" expanded="false" />
-            <element signature="docComment;method#subscribeToCO2#0;class#CO2System#0" expanded="false" />
             <element signature="method#subscribeToCO2#0;class#CO2System#0" expanded="false" />
             <element signature="method#unsubscribeToCO2#0;class#CO2System#0" expanded="false" />
             <element signature="method#createNotification#0;class#CO2System#0" expanded="false" />
