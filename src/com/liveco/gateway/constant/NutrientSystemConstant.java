@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class NutrientSystemConstant {
 
-	public enum Table{
+	public enum Table {
 
 		/*
 TYPE ST_Config :

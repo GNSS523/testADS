@@ -166,4 +166,5 @@ public class CO2SystemUI extends JFrame{
             maxValue.setEnabled(true);
         }
     }
+
 }
