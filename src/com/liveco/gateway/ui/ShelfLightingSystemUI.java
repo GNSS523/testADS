@@ -21,6 +21,7 @@ public class ShelfLightingSystemUI extends JFrame {
     private JLabel plc;
     private JButton on;
     private JButton off;
+    private JLabel range;
     private JTextField input;
     public static void main(String[] args) {
         // write your code here
@@ -66,6 +67,8 @@ public class ShelfLightingSystemUI extends JFrame {
         off.setBounds(200, 350, 100, 50);
         plc =  new JLabel("");
         plc.setBounds(100, 200, 100, 50);
+        range = new JLabel("range");
+        range.setBounds(0, 250, 100, 50);
         input = new JTextField();
         input.setBounds(100, 250, 100, 50);
         // 设置模式
@@ -105,6 +108,7 @@ public class ShelfLightingSystemUI extends JFrame {
         getContentPane().add(on);
         getContentPane().add(off);
         getContentPane().add(plc);
+        getContentPane().add(range);
         getContentPane().add(input);
     }
 
