@@ -20,8 +20,7 @@ import de.beckhoff.jni.tcads.AdsCallbackObject;
 public class HydroponicsSystem extends BaseSystem{
 
     private static final Logger LOG = LogManager.getLogger(HydroponicsSystem.class);
-	
-	
+
 	public static final SystemStructure type = SystemStructure.HYDROPONICS;
 	
 	public static int data_length = HydroponicsConstant.Table.getTotalLength();
@@ -38,15 +37,12 @@ public class HydroponicsSystem extends BaseSystem{
 		super(ads,index, system_id,base_address,array);
 	}	
 	
-	
-
 	/*
 	public void test111(){
 		System.out.println( this.getTableOffset()  );
 	}
 	*/
-	
-		
+			
 	public int getTableOffset(){
 		return 35;
 	}	
@@ -210,7 +206,7 @@ public class HydroponicsSystem extends BaseSystem{
 	 * *************/
 	
 	
-	private void setAttribute(String type,  int value) throws AdsException{
+	public void setAttribute(String type,  int value) throws AdsException{
 		this.configAttribute( type , value  );
 	}
 	

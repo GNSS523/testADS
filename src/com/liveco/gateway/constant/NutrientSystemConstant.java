@@ -1,3 +1,4 @@
+
 package com.liveco.gateway.constant;
 
 import java.util.HashMap;
@@ -379,11 +380,11 @@ END_TYPE
 	
     /*
      *  检测模式
-     */
-	
-	
 	
 	public enum  TABLE{
 		
-	}
+	}	
+	     */
+
+
 }

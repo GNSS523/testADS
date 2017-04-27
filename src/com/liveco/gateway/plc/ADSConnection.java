@@ -17,6 +17,7 @@ public class ADSConnection {
 	
 	AmsAddr addr = new AmsAddr();
 	private long port = 0;
+	private String netId;
 	
 	public boolean isConnected(){
 		return port !=0;
@@ -26,35 +27,51 @@ public class ADSConnection {
 		return addr.getNetIdString() + ":" + addr.getPort();
 	}	
 	
+	public long getPort(){
+		return this.port;
+	}
+	
+	public String getNetId(){
+		return this.netId;
+	}
+	
 	public String getAdsVersion() {
 
 		AdsVersion lAdsVersion = AdsCallDllFunction.adsGetDllVersion();
-
 		return new Integer(lAdsVersion.getVersion()) + "." + new Integer(lAdsVersion.getRevision()) + "."
 				+ lAdsVersion.getBuild();
 	}	
 
-	public void open(int target_port) throws AdsException{
-		long err;
-        addr = new AmsAddr();
-        System.out.println( addr.getNetId().toString() );
-        
-        err = AdsCallDllFunction.getLocalAddress(addr);
-        addr.setPort(AdsCallDllFunction.AMSPORT_R0_PLC_RTS1);        
-        
-        // Open communication            
-        AdsCallDllFunction.adsPortOpen();
-        err = AdsCallDllFunction.getLocalAddress(addr);
-        addr.setPort(target_port);
-        System.out.println("netid:"+AdsCallDllFunction.ADSERR_INV_AMS_NETID +" "+ AdsCallDllFunction.AMSPORT_R0_PLC_RTS1);
-        if (err != 0) {
-            System.out.println("Error: Open communication: 0x"
-                    + Long.toHexString(err));
-        } else {
-            System.out.println("Success: Open communication!");
-        }
-        	        	
-	}
+	
+	public long openPort(boolean localNetAddr, String txtNetString, int Prt) {
+		
+          System.out.println("openport "+localNetAddr+"  "+txtNetString+" "+Prt);
+	
+	      if (port == 0) {
+	        AdsVersion lAdsVersion = AdsCallDllFunction.adsGetDllVersion();
+	        System.out.println("AdsVersion: " + new Integer(lAdsVersion.getVersion())
+	                           + "." + new Integer(lAdsVersion.getRevision())
+	                           + "." + lAdsVersion.getBuild());
+
+	        port = AdsCallDllFunction.adsPortOpen();
+
+	        if (localNetAddr == true) {
+	          this.netId = txtNetString;
+	          addr.setNetIdString(txtNetString);
+	        }
+	        else {
+	          long nErr = AdsCallDllFunction.getLocalAddress(addr); //local netid
+	          if (nErr != 0) {
+	            System.out.println("getLocalAddress() failed with " + nErr);
+	            AdsCallDllFunction.adsPortClose();
+	            return 0;
+	          }
+	        }
+	        addr.mPort = Prt;
+	      }
+	    return port;
+	}	
+	
 	
 	public void close(){
 
@@ -71,25 +88,7 @@ public class ADSConnection {
 		
 	}	
 	
-	public long openPort(boolean localNetAddr, String txtNetString, int Prt) throws AdsException {
-
-		if (port == 0) {
-			port = AdsCallDllFunction.adsPortOpen();
-			if (localNetAddr == true) {
-				addr.setNetIdStringEx(txtNetString);
-			} else {
-				long nErr = AdsCallDllFunction.getLocalAddress(addr);
-
-				if (nErr != 0) {
-					AdsCallDllFunction.adsPortClose();
-					throw new AdsException("openPort() -> getLocalAddress() failed with code: " + nErr);
-				}
-			}	
-			addr.mPort = Prt;
-		}
-
-		return port;
-	}	
+	
 
 	public synchronized void closePort() throws AdsException {
 		if (port != 0) {

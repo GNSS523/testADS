@@ -37,13 +37,14 @@ END_TYPE
 		ATOMIZER (      (byte)7, (byte)2,  "actuator.atomizer",   "actuator.atomizer", (byte)1 ),
 		
 		
-		CONFIG_MODE(    (byte)9, (byte)2,  "config.mode"   ,   "config the mode ", (byte)-1),
-		COMMAND_FILL(    (byte)11, (byte)2,  "command.set.fill"  ,    "command to fill in the tank", (byte)-1),
-		CONFIG_PUMP_RUN_TIME(  (byte)13, (byte)4,  "config.attr.pump.runtime" ,"config.pump.runtime", (byte)-1),
-		CONFIG_PUMP_STOP_TIME( (byte)17, (byte)4,  "config.attr.pump.stoptime","config.pump.stoptime", (byte)-1 );
+		CONFIG_MODE(    (byte)9, (byte)2,  "config.system.mode"   ,   "config the mode ", (byte)-1),
+		RPC_FILL_WATER(    (byte)11, (byte)2,  "rpc.fill_water"  ,    "command to fill in the tank", (byte)-1),
+		CONFIG_PUMP_RUN_TIME(  (byte)13, (byte)4,  "attribute.pump.runtime" ,"config.pump.runtime", (byte)-1),
+		CONFIG_PUMP_STOP_TIME( (byte)17, (byte)4,  "attribute.pump.stoptime","config.pump.stoptime", (byte)-1 ),
+		CONFIG_ATOMIZER_RUN_TIME(  (byte)21, (byte)4,  "attribute.atomizer.runtime" ,"config.atomizer.runtime", (byte)-1),
+		CONFIG_ATOMIZER_STOP_TIME( (byte)25, (byte)4,  "attribute.atomizer.stoptime","config.atomizer.stoptime", (byte)-1 );
 		
 
-		
 		private final byte offset;
 		private final byte number;
 		private final String type;

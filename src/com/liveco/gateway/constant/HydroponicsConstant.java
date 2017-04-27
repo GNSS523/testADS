@@ -30,10 +30,10 @@ END_TYPE
 		VALVE_OUT(             (byte)4, (byte)2,  "actuator.valve",   "out valve", (byte)2),
 		LEVEL_SENSOR(          (byte)6, (byte)1,  "sensor.water_level_sensor",   "sensor.water_level_sensor", (byte)1 ),
 		
-		CONFIG_MODE(           (byte)8, (byte)2,  "config.mode"   ,   "config the mode ", (byte)-1),
-		COMMAND_FILL(          (byte)10, (byte)2, "command.fill"  ,    "command to fill in the tank", (byte)-1),
+		CONFIG_MODE(           (byte)8, (byte)2,  "config.system.mode"   ,   "config the mode ", (byte)-1),
+		RPC_FILL_WATER(          (byte)10, (byte)2, "rpc.fill_water"  ,    "command to fill in the tank", (byte)-1),
 		CONFIG_PUMP_RUN_TIME(  (byte)12, (byte)4, "attribute.pump.time.run" ,"config the run time for the pump", (byte)-1),
-		CONFIG_PUMP_STOP_TIME( (byte)16, (byte)4, "attribute.attr.pump.time.stop","config the stop time for the pump", (byte)-1 );
+		CONFIG_PUMP_STOP_TIME( (byte)16, (byte)4, "attribute.pump.time.stop","config the stop time for the pump", (byte)-1 );
 		
 		
 		

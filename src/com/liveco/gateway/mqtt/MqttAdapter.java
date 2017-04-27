@@ -70,6 +70,10 @@ public class MqttAdapter {
         this.callback = callback;
     }    
     
+    public MqttAdapterConfiguration getConfiguration(){
+    	return configuration;
+    }
+    
     /**
      * This starts the adapter.
      */

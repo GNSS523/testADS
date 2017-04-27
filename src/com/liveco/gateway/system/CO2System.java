@@ -197,7 +197,7 @@ public class CO2System extends BaseSystem {
 	 * *************/
 		
 	//     
-	private void setAttribute(String type,  int value) throws AdsException{
+	public void setAttribute(String type,  int value) throws AdsException{
 		this.configAttribute( type , value  );
 	}
 	

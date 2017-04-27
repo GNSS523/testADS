@@ -51,11 +51,7 @@ public class Main {
 	
 	public ADSConnection openConnection(){
 		ads = new ADSConnection();
-		try {
-			ads.open(851);		
-		} catch (AdsException e) {	
-			e.printStackTrace();
-		}	
+		ads.openPort(false,"5.42.203.215.1.1",851);	
 		return ads;
 	}
 		

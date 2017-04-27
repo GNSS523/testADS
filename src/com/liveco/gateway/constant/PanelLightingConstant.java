@@ -7,11 +7,11 @@ public class PanelLightingConstant {
 
 	public enum Table {
 	
-			RED(       (byte)0, (byte)2,  "actuator.led.red",    "actuator.led red ",     (byte)1),
-			BLUE(      (byte)2, (byte)2 , "actuator.led.blue",   "actuator.led blue",     (byte)2),
-			GREEN(     (byte)4, (byte)2,  "actuator.led.green",  "actuator.led green",    (byte)3),
-			FAR_RED(   (byte)6, (byte)2,  "actuator.led.far_red","actuator.led far_red",  (byte)4),
-			UV(        (byte)8, (byte)2,  "actuator.led.uv",     "actuator.led uv",       (byte)5);
+			RED(       (byte)0, (byte)2,  "actuator.panel_led.red",    "actuator.panel_led red ",     (byte)1),
+			BLUE(      (byte)2, (byte)2 , "actuator.panel_led.blue",   "actuator.panel_led blue",     (byte)2),
+			GREEN(     (byte)4, (byte)2,  "actuator.panel_led.green",  "actuator.panel_led green",    (byte)3),
+			FAR_RED(   (byte)6, (byte)2,  "actuator.panel_led.far_red","actuator.panel_led far_red",  (byte)4),
+			UV(        (byte)8, (byte)2,  "actuator.panel_led.uv",     "actuator.panel_led uv",       (byte)5);
 			
 			private final byte offset;
 			private final byte number;

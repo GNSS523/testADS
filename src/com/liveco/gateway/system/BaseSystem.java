@@ -43,6 +43,13 @@ public class BaseSystem {
 		this.ads = ads;
 	}	
 	
+	public boolean isConnected(){
+		if(this.ads == null) return false;
+		if(this.ads.isConnected()) return true;
+		else return false;
+	}
+	
+	
 	public int getIndex(){
 		return this.index;
 	}

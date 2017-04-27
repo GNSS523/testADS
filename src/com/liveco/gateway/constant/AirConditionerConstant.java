@@ -9,6 +9,17 @@ public class AirConditionerConstant {
  * 
 TYPE ST_IndoorCondition :
 STRUCT
+
+	0 0 0 0 0 0 0 0 
+	sleep   bit 0
+	on      bit 1
+	lock    bit 2
+	off     bit 8
+	cool    bit 9
+	dry     bit 10
+	vertilation bit 11
+	heat    bit 12
+
 	wOperationCommand:WORD;//=1,write setting value
     wOperationMode:WORD;//bit0-sleep;1-swing on;2-indoor mode locked;bit8-off;bit9-cool;bit10-dry;bit11-ventilation;bit12-heat
 	wFanOperationMode:WORD;//indoor fan:8-off;9-low speed;10-mid speed;11-high speed;12-auto

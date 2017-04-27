@@ -5,6 +5,7 @@ import de.beckhoff.jni.JNIByteBuffer;
 import de.beckhoff.jni.tcads.AmsAddr;
 import de.beckhoff.jni.tcads.AdsCallDllFunction;
 import de.beckhoff.jni.tcads.AdsSymbolEntry;
+import de.beckhoff.jni.tcads.AmsNetId;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -29,6 +30,11 @@ public class Test {
         System.out.println( addr.getNetId().toString() );
         // Open communication            
         AdsCallDllFunction.adsPortOpen();
+        
+        AmsNetId netid = new AmsNetId();
+        netid.setCharArr("5.42.203.215.1.1".toCharArray());
+        addr.setNetId(netid);
+        
         err = AdsCallDllFunction.getLocalAddress(addr);
         addr.setPort(851);
         System.out.println("netid:"+AdsCallDllFunction.ADSERR_INV_AMS_NETID +" "+ AdsCallDllFunction.AMSPORT_R0_PLC_RTS1);
@@ -592,7 +598,7 @@ public class Test {
 		
 	}
 
-/*	
+/*	*/
     public static void main(String[] args)
     {
     	
@@ -611,6 +617,7 @@ public class Test {
     	//Test.writeSymbolArray(addr , "GVL_HMI.b",array );	
     	//Test.readArraySymbol(addr,   "GVL_HMI.b", 3);
     	
+    	/*
     	byte array2[] = { (byte)12, (byte)11, (byte)3,(byte)4,(byte)5,(byte)6,(byte)7};
     	Test.writeSymbolArray(addr , "GVL_HMI.p1",array2 );    	
     	Test.readSymbolAndValue(addr, "GVL_HMI.p1",2);
@@ -619,11 +626,11 @@ public class Test {
     	Test.readArraySymbol( addr, "GVL_HMI.p1.aARRAY", 3);
     	
     	Test.close(addr);
-
+		*/
     	//Test.connectMQTT();
 
  }
- */
+ 
   
 	   public static void connectMQTT(){
 
@@ -749,5 +756,7 @@ public class Test {
       }	 
       */ 
   }
+  
+  
     
 }

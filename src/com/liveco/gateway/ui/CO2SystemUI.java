@@ -1,6 +1,9 @@
 package com.liveco.gateway.ui;
 
 import com.liveco.gateway.constant.CO2SystemConstant;
+import com.liveco.gateway.plc.ADSConnection;
+import com.liveco.gateway.plc.AdsException;
+import com.liveco.gateway.plc.DeviceTypeException;
 import com.liveco.gateway.system.CO2System;
 
 import javax.swing.*;
@@ -8,6 +11,7 @@ import javax.swing.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import java.awt.AWTEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -18,59 +22,54 @@ import java.util.Vector;
 /**
  * Created by halsn on 17-4-1.
  */
-public class CO2SystemUI extends JFrame{
+public class CO2SystemUI extends JPanel{
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = -3403675278480479931L;
-	private CO2System s;
+	
+	private CO2System system;
     private JPanel jp;
+    
     private JLabel modeName;
     private JComboBox modeSelect;
+    
     private JLabel valveName;
     private JLabel valvePLC;
     private JButton valveOn;
     private JButton valveOff;
+    
     private JLabel CO2SensorName;
     private JLabel CO2SensorValue;
+    
     private JLabel minText;
     private JLabel maxText;
     private JTextField minValue;
     private JTextField maxValue;
 
-    public static void main(String[] args) {
-        // write your code here
- 	   	Logger logger = Logger.getLogger("com.liveco.gateway");
- 	   	logger.setLevel(Level.DEBUG); 
- 	   	
-    	CO2System s = new CO2System(null, 0, "af");
-        new CO2SystemUI(s);
+    public CO2SystemUI(CO2System system) {
+        super();
+        this.system = system;
+
+        enableEvents(AWTEvent.WINDOW_EVENT_MASK);
+        try {
+           initGui();
+        }
+        catch (Exception e) {
+          e.printStackTrace();
+        }        
+       
     }
 
-    public CO2SystemUI(CO2System s) {
-        super("CO2测试");
-        this.s = s;
-        initGui();
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
-                System.exit(1);
-            }
-        });
-    }
+    private void initGui() throws Exception {
+    	
+ 	    setLayout(null); 	   
 
-    private void initGui() {
-        setSize(800, 600);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setResizable(true);
-        getContentPane().setLayout(null);
+    	
         modeUI();
         CO2ValveControlUI();
         CO2SensorUI();
         CO2ValveSettingUI();
-        setVisible(true);
     }
 
     private void modeUI() {
@@ -78,41 +77,52 @@ public class CO2SystemUI extends JFrame{
         vs.add(String.valueOf(CO2SystemConstant.ModeCommand.AUTOMATIC));
         vs.add(String.valueOf(CO2SystemConstant.ModeCommand.MANUAL));
         modeSelect = new JComboBox(vs);
-        modeSelect.setBounds(100,100,100,50);
         // 设置模式
         modeSelect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String mode = "" + modeSelect.getItemAt(modeSelect.getSelectedIndex());
-                //CO2System 这里不知道用哪个函数
-                //s.setMode(mode, CO2SystemConstant.ModeCommand.get(mode));
-                setMode(mode);
+                
+                try {
+					setMode(mode);
+				} catch (AdsException e1) {
+					e1.printStackTrace();
+				}
             }
         });
-        modeName = new JLabel("Mode Name: ");
-        modeName.setBounds(50, 200, 300, 30);
+        modeName = new JLabel("Modes:");
 
-        getContentPane().add(modeName);
-        getContentPane().add(modeSelect);
+        modeName.setBounds(  10, 30, 200, 30);
+        modeSelect.setBounds( 80,20, 200, 50);
+
+        add(modeName);
+        add(modeSelect);
     }
 
     private void CO2ValveControlUI() {
-        valveName = new JLabel("Valve Name: " + CO2SystemConstant.Table.VALVE.getDescritpion());
+        valveName = new JLabel("" + CO2SystemConstant.Table.VALVE.getDescritpion());
         valvePLC = new JLabel("Valve PLC: " + String.valueOf(CO2SystemConstant.Table.VALVE.getOffset()));
-        valveName.setBounds(100, 200, 300, 30);
-        valvePLC.setBounds(500, 200, 300, 30);
+        valvePLC.setBounds(500, 200, 300, 25);
         valveOn = new JButton("Valve On");
         valveOff = new JButton("Vave Off");
-        valveOn.setBounds(100, 300, 100, 50);
-        valveOff.setBounds(300, 300, 100, 50);
+        
+        valveName.setBounds( 10,  60, 200, 50);
+        valveOn.setBounds(   100, 70, 100, 25);
+        valveOff.setBounds(  200, 70, 100, 25);
+        
         valveOn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 valveOff.setEnabled(true);
                 valveOn.setEnabled(false);
-                // CO2System 打开valve
-                // 找不到那个函数
-                // s.setMode(CO2SystemConstant.Table.VALVE.);
+                
+                try {
+					system.open("actuator.valve",1);
+				} catch (AdsException e1) {
+					e1.printStackTrace();
+				} catch (DeviceTypeException e1) {
+					e1.printStackTrace();
+				}               
             }
         });
         valveOff.addActionListener(new ActionListener() {
@@ -120,22 +130,29 @@ public class CO2SystemUI extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 valveOn.setEnabled(true);
                 valveOff.setEnabled(false);
-                // CO2System 关闭valve
+
+                try {
+					system.close("actuator.valve",1);
+				} catch (AdsException e1) {
+					e1.printStackTrace();
+				} catch (DeviceTypeException e1) {
+					e1.printStackTrace();
+				}   
             }
         });
-        getContentPane().add(valveName);
-        getContentPane().add(valvePLC);
-        getContentPane().add(valveOn);
-        getContentPane().add(valveOff);
+        add(valveName);
+        //getContentPane().add(valvePLC);
+        add(valveOn);
+        add(valveOff);
     }
 
     private void CO2SensorUI() {
-        CO2SensorName = new JLabel("Sensor Name: " + CO2SystemConstant.Table.CO2.getDescritpion());
-        CO2SensorValue = new JLabel("Sensor Value: " + String.valueOf(CO2SystemConstant.Table.CO2.getNumber()));
-        CO2SensorName.setBounds(100, 400, 300, 30);
-        CO2SensorValue.setBounds(500, 400, 300, 30);
-        getContentPane().add(CO2SensorName);
-        getContentPane().add(CO2SensorValue);
+        CO2SensorName = new JLabel("" + CO2SystemConstant.Table.CO2.getDescritpion());
+        CO2SensorValue = new JLabel("Value: " + String.valueOf(CO2SystemConstant.Table.CO2.getNumber()));
+        CO2SensorName.setBounds(10, 110, 300, 30);
+        CO2SensorValue.setBounds(100, 110, 300, 30);
+        add(CO2SensorName);
+        add(CO2SensorValue);
     }
 
     private void CO2ValveSettingUI() {
@@ -147,39 +164,107 @@ public class CO2SystemUI extends JFrame{
         maxText = new JLabel("max: " + String.valueOf(maxLimit));
         minValue = new JTextField();
         maxValue = new JTextField();
-        minText.setBounds(50, 500, 100, 30);
-        maxText.setBounds(450, 500, 100, 30);
-        minValue.setBounds(150, 500, 50, 30);
-        maxValue.setBounds(560, 500, 50, 30);
+        minText.setBounds(10, 150, 100, 30);
+        minValue.setBounds(100, 150, 100, 30);
+        
+        maxText.setBounds(250, 150, 100, 30);
+        maxValue.setBounds(360, 150, 100, 30);
         minValue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 minText.setText("min: " + minValue.getText());
+                int min = Integer.parseInt( maxValue.getText() );                
+           	    try {
+					system.setAttribute("config.attr.CO2.threshold.low",  min ) ;
+				} catch (AdsException e1) {
+					e1.printStackTrace();
+				}
             }
         });
         maxValue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 maxText.setText("max: " + maxValue.getText());
+                int max = Integer.parseInt( maxValue.getText() );
+           	    try {
+					system.setAttribute("config.attr.CO2.threshold.high",  max ) ;
+				} catch (AdsException e1) {
+					e1.printStackTrace();
+				}     
             }
         });
-        getContentPane().add(minText);
-        getContentPane().add(maxText);
-        getContentPane().add(minValue);
-        getContentPane().add(maxValue);
+        add(minText);
+        add(maxText);
+        add(minValue);
+        add(maxValue);
     }
 
-    private void setMode(String m) {
-        if (Objects.equals(m, CO2SystemConstant.ModeCommand.AUTOMATIC.getDescritpion())) {
-            valveOn.setEnabled(false);
-            valveOff.setEnabled(false);
-            minValue.setEnabled(false);
-            maxValue.setEnabled(false);
-        } else if (Objects.equals(m, CO2SystemConstant.ModeCommand.MANUAL.getDescritpion())) {
-            valveOn.setEnabled(true);
-            valveOff.setEnabled(true);
-            minValue.setEnabled(true);
-            maxValue.setEnabled(true);
-        }
+    private void setMode(String m) throws AdsException {
+    	
+    	if(system.isConnected()){
+            if (Objects.equals(m, CO2SystemConstant.ModeCommand.AUTOMATIC.getDescritpion())) {
+                valveOn.setEnabled(false);
+                valveOff.setEnabled(false);
+                minValue.setEnabled(false);
+                maxValue.setEnabled(false);
+                system.configMode("config.system.mode", CO2SystemConstant.ModeCommand.AUTOMATIC);
+                
+            } else if (Objects.equals(m, CO2SystemConstant.ModeCommand.MANUAL.getDescritpion())) {
+                valveOn.setEnabled(true);
+                valveOff.setEnabled(true);
+                minValue.setEnabled(true);
+                maxValue.setEnabled(true);
+                
+                system.configMode("config.system.mode", CO2SystemConstant.ModeCommand.MANUAL);
+
+            }    		
+    	}else{
+    		
+    		
+    		
+    	}
     }
+    
+    
+    public static void main(String[] args) {
+        // write your code here
+ 	   	Logger logger = Logger.getLogger("com.liveco.gateway");
+ 	   	logger.setLevel(Level.DEBUG); 
+ 		
+ 	   	//ADSConnection ads = new ADSConnection();
+ 	   	//ads.openPort(false,"5.42.203.215.1.1",851);	
+ 		 	   	
+ 	   	CO2System system_CO2 = new CO2System(null, 0, "af");
+ 	    CO2SystemUI CO2_ui = new CO2SystemUI(system_CO2);
+ 	   	
+ 	    JFrame main_frame = new JFrame();
+ 	    main_frame.setSize(800, 600);
+ 	    main_frame.setTitle("CO2 system");
+ 	    main_frame.setLocationRelativeTo(null);
+ 	    main_frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+ 	    main_frame.setResizable(true);
+ 	    main_frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                System.exit(1);
+            }
+        });
+ 	     	    
+ 	    main_frame.getContentPane().add(CO2_ui);
+	    
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+         
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+            	main_frame.setVisible(true);
+            }
+        });    
+    
+    }    
 }
