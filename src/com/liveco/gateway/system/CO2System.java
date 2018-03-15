@@ -4,18 +4,18 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.liveco.gateway.constant.CO2SystemConstant;
-import com.liveco.gateway.constant.HydroponicsConstant;
 import com.liveco.gateway.constant.ICommand;
 import com.liveco.gateway.constant.OnOffActuatorConstant;
 import com.liveco.gateway.constant.SystemStructure;
 import com.liveco.gateway.mqtt.MqttCommand;
 import com.liveco.gateway.plc.ADSConnection;
 import com.liveco.gateway.plc.AdsException;
-import com.liveco.gateway.plc.AdsListener;
 import com.liveco.gateway.plc.DeviceTypeException;
 
+import de.beckhoff.jni.Convert;
 import de.beckhoff.jni.JNILong;
 import de.beckhoff.jni.tcads.AdsCallbackObject;
+import de.beckhoff.jni.tcads.CallbackListenerAdsState;
 
 public class CO2System extends BaseSystem {
 
@@ -35,9 +35,13 @@ public class CO2System extends BaseSystem {
 		super(ads,index, system_id,base_address,array);
 	}
 	
-
+	public String getType(){
+		return SystemStructure.CO2_SYSTEM.name();
+	}
 	
 	public byte getTableFieldOffset(String type, int id){
+		LOG.debug("CO2SystemConstant.getTableFieldOffset  "+type+"  "+id);
+		LOG.debug("offset  "+CO2SystemConstant.Table.getOffset(type,id));
 		return CO2SystemConstant.Table.getOffset(type,id);
 	}
 	
@@ -127,7 +131,7 @@ public class CO2System extends BaseSystem {
 				name = type;				
 				this.getAttributedStatus(name);
 				System.out.println(" get the attribute  : ");
-				break;
+				break;t
 				
 			case "config":
 				name = type+"."+long_name;				
@@ -184,7 +188,7 @@ public class CO2System extends BaseSystem {
 	}
 	// 
 	public String getMode(String name) throws AdsException{
-		byte value = this.getModeStatus(name, 1)[0];
+		byte value = this.getModeStatus(name, 1, 1)[0];
 		return CO2SystemConstant.ModeState.getName(value);
 	}	
 	
@@ -198,14 +202,52 @@ public class CO2System extends BaseSystem {
 		
 	//     
 	public void setAttribute(String type,  int value) throws AdsException{
-		this.configAttribute( type , value  );
+		byte[] values = Convert.IntToByteArr(value);
+		this.configAttribute( type , values  );
 	}
 	
-	// getAttribute("config.attr.CO2.threshold")
-	public int getAttribute(String type) throws AdsException, DeviceTypeException{
-		return this.getAttributedStatus(type);
-
+	// getAttribute("config.attr.CO2.threshold")  REAL == 4
+	public float getAttribute(String type) throws AdsException, DeviceTypeException{
+		byte values[]= this.getAttributedStatus(type,4);
+		LOG.debug("CO2 get attribute   "+ values[0]+ " "+ values[1]+"   "+ values[2]+"   "+ values[3]+"   " +"    "+Convert.ByteArrToFloat(values) );
+		return Convert.ByteArrToFloat(values);
 	}	
+
+	
+	/**************    *****************/
+	String outlet_valve_value;
+	String mode_value;
+	
+	float CO2_low_value;
+	float CO2_high_value;
+
+	public String getOutletValveValue(){
+		return outlet_valve_value;		
+	}
+	
+	public String getSysteModeValue(){
+		return mode_value;						
+	}
+	
+	public float [] getCO2ThresholdValues(){
+		return new float[]{CO2_low_value,CO2_high_value};
+	}	
+	
+	public void refreshSystemStatus(){
+		try {
+
+			outlet_valve_value  = getControlStatus("actuator.valve", 1);
+			
+			mode_value  = getMode("config.system.mode");  
+			
+			CO2_low_value = getAttribute("attribute.CO2.threshold.low");
+			CO2_high_value =  getAttribute("attribute.CO2.threshold.high");
+			
+		} catch (AdsException | DeviceTypeException e) {
+			e.printStackTrace();
+		}		
+	}	
+	
 	
 	
 	/*************** subscribe to the water sensor  
@@ -215,32 +257,32 @@ public class CO2System extends BaseSystem {
 	 * 
 	 * *************/
 
-	public void subscribeToCO2(int id) throws AdsException{
+	public void subscribeToCO2(int id, CallbackListenerAdsState listener) throws AdsException{
 		
-		long address = this.getSensorAddress("sensor.CO2", id);
-		this.createNotification(address);
+		long address = this.getSensorAddress("sensor.CO2", id) ; // abnormal 2 bytes
+		System.out.println("subscribe to CO2 "+address);
+		this.createNotification(address, listener);
 	}
 	
-	public void unsubscribeToCO2(int id) throws AdsException{
+	public void unsubscribeToCO2(int id, CallbackListenerAdsState listener) throws AdsException{
 		
-		long address = this.getSensorAddress("sensor.CO2", id);
-		this.deleteNotification();
+		long address = this.getSensorAddress("sensor.CO2", id);   // abnormal 2 bytes at 3,4 positions -- 0  1  0  0  0  -99  -41  67  1  0  0  0  0  0  -128  67  0  0  0  68 --
+		this.deleteNotification(listener);
 	}	
 	
 	AdsCallbackObject CO2Object;
-	AdsListener CO2listener = new AdsListener();
 	JNILong CO2Notification;
-	public void createNotification(long indexOffset) throws AdsException{	 
+	public void createNotification(long indexOffset, CallbackListenerAdsState listener) throws AdsException{	 
         // Create and add listener
 		CO2Object = new AdsCallbackObject();
-		CO2Object.addListenerCallbackAdsState(CO2listener);  
+		CO2Object.addListenerCallbackAdsState(listener);  
 		CO2Notification = new JNILong();       
-        getADSConnection().createNotification(indexOffset, CO2Notification, CO2listener);
+        getADSConnection().createNotification(indexOffset, CO2Notification, listener);
 	}
 
-	public void deleteNotification() throws AdsException{
+	public void deleteNotification( CallbackListenerAdsState listener) throws AdsException{
         // Delete listener
-		CO2Object.removeListenerCallbackAdsState(CO2listener);
+		CO2Object.removeListenerCallbackAdsState(listener);
         getADSConnection().deleteNotification(CO2Notification);
 	}	
 	

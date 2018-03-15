@@ -7,14 +7,13 @@ public class OnOffActuatorConstant {
 
 	public enum Command  implements ICommand{
 
-		ON((byte)1),
-		OFF((byte)2);
+		OFF((byte)1),
+		ON((byte)2);
 		
 		private final byte value;
 		Command(byte value){
 			this.value = value;
 		}
-
 			
 		public byte getValue(){
 			return this.value;
@@ -42,7 +41,7 @@ public class OnOffActuatorConstant {
 		
 		OFF((byte)0),
 		ON((byte)1),
-		ERROR((byte)2);
+		ERROR((byte)4);
 		
 		private final byte value;
 		State(byte value){

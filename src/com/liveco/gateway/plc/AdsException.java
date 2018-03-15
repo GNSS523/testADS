@@ -12,10 +12,21 @@ public class AdsException extends PlcException{
 	public AdsException(String errMessage){
 		super(errMessage);
 	}
+	
+	private String errMessage;
+	private int err;
+	
+	public String getErrMessage(){
+		return this.errMessage;
+	}
+	
+	public int getErrCode(){
+		return this.err;
+	}
 
 	public AdsException(int err){
 		super(err);
-		String errMessage;
+		
 		switch(err){
 			case 0x1:
 				errMessage = "Internal error";
@@ -266,7 +277,11 @@ public class AdsException extends PlcException{
 				break;		
 			case 0x755:
 				errMessage = "sync port is locked";
-				break;		
+				break;	
+				
+		    default:
+		    	errMessage = "unknown fault";
+		    	break;
 		}
 	}	
 	

@@ -1,6 +1,5 @@
 package com.liveco.gateway.system;
 
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -11,14 +10,15 @@ import com.liveco.gateway.constant.SystemStructure;
 import com.liveco.gateway.mqtt.MqttCommand;
 import com.liveco.gateway.plc.ADSConnection;
 import com.liveco.gateway.plc.AdsException;
-import com.liveco.gateway.plc.AdsListener;
 import com.liveco.gateway.plc.DeviceTypeException;
 
+import de.beckhoff.jni.Convert;
 import de.beckhoff.jni.JNILong;
 import de.beckhoff.jni.tcads.AdsCallbackObject;
+import de.beckhoff.jni.tcads.CallbackListenerAdsState;
 
 public class HydroponicsSystem extends BaseSystem{
-
+	
     private static final Logger LOG = LogManager.getLogger(HydroponicsSystem.class);
 
 	public static final SystemStructure type = SystemStructure.HYDROPONICS;
@@ -42,7 +42,10 @@ public class HydroponicsSystem extends BaseSystem{
 		System.out.println( this.getTableOffset()  );
 	}
 	*/
-			
+	public String getType(){
+		return SystemStructure.HYDROPONICS.name();
+	}
+	
 	public int getTableOffset(){
 		return 35;
 	}	
@@ -189,14 +192,15 @@ public class HydroponicsSystem extends BaseSystem{
 	 * 
 	 * *************/	
 	
-	public void setMode(String name, HydroponicsConstant.ModeCommand command) throws AdsException{
-		this.configMode(name, command);
+	public void setMode(ICommand command) throws AdsException{
+		this.configMode("config.system.mode", command);
 	}
 	public String getMode(String name) throws AdsException{
-		byte value = this.getModeStatus(name, 1)[0];
+		byte value = this.getModeStatus(name, 1,1)[0];
+		System.out.println("getMode   "+ name + "  value:"+value  );
 		return HydroponicsConstant.ModeState.getName(value);
 	}
-	
+
 
 	/*************** set Pump Running and Stop time  
 	 * 
@@ -207,11 +211,15 @@ public class HydroponicsSystem extends BaseSystem{
 	
 	
 	public void setAttribute(String type,  int value) throws AdsException{
-		this.configAttribute( type , value  );
+		byte[] values = Convert.IntToByteArr(value);
+		this.configAttribute( type , values  );
 	}
 	
-	public int getAttribute(String type) throws AdsException, DeviceTypeException{
-		return this.getAttributedStatus(type);
+	public int getAttribute(String type) throws AdsException{
+		byte values[]= this.getAttributedStatus(type,2);
+		LOG.debug("hydroponics get attribute   "+ values[0]+ " "+ values[1]+"   "+values.length+"  "+Convert.ByteArrToShort(values) );
+		return Convert.ByteArrToShort(values);
+		
 	}	
 	
 	
@@ -226,7 +234,7 @@ public class HydroponicsSystem extends BaseSystem{
 	}
 	public String getFillReplyStatus(String name) throws AdsException{
 		//if(name == "actuator.pump" || name == "actuator.valve"){}
-		byte value = this.getModeStatus(name, 1)[0];
+		byte value = this.getModeStatus(name, 1,1)[0];
 		return HydroponicsConstant.FillInStatus.getName(value);
 	}
 
@@ -238,43 +246,93 @@ public class HydroponicsSystem extends BaseSystem{
 	 * 
 	 * *************/
 
-	public void subscribeToWaterLevel(int id) throws AdsException{
+	public void subscribeToWaterLevel(int id, CallbackListenerAdsState listener) throws AdsException{
 		
 		long address = this.getSensorAddress("sensor.water_level_sensor", id);
-		this.createNotification(address);
+		System.out.println("subscribeToWaterLevel   "+address );
+		this.createNotification(address, listener);
 	}
 	
-	public void unsubscribeToWaterLevel(int id) throws AdsException{
+	public void unsubscribeToWaterLevel(int id, CallbackListenerAdsState listener) throws AdsException{
 		
 		long address = this.getSensorAddress("sensor.water_level_sensor", id);
-		this.deleteNotification();
+		this.deleteNotification(listener);
 	}
 	
 	
 	AdsCallbackObject waterLevelObject;
-	AdsListener waterLevellistener = new AdsListener();
 	JNILong waterLevelNotification;
 		
-	public void createNotification(long indexOffset) throws AdsException{	 
+	public void createNotification(long indexOffset, CallbackListenerAdsState listener) throws AdsException{	 
         // Create and add listener
 		waterLevelObject = new AdsCallbackObject();
-		waterLevelObject.addListenerCallbackAdsState(waterLevellistener);  
+		waterLevelObject.addListenerCallbackAdsState(listener);  
 		waterLevelNotification = new JNILong();       
-        getADSConnection().createNotification(indexOffset, waterLevelNotification, waterLevellistener);
+        getADSConnection().createNotification(indexOffset, waterLevelNotification, listener);
 	}
 
-	public void deleteNotification() throws AdsException{
+	public void deleteNotification(CallbackListenerAdsState listener) throws AdsException{
         // Delete listener
-		waterLevelObject.removeListenerCallbackAdsState(waterLevellistener);
-        getADSConnection().deleteNotification(waterLevelNotification);
+		if(waterLevelObject!=null){
+			waterLevelObject.removeListenerCallbackAdsState(listener);
+			getADSConnection().deleteNotification(waterLevelNotification);
+			waterLevelObject = null;
+			listener = null;
+		}
 	}	
 	
+	
+	/**************    *****************/
+	String inlet_valve_value;
+	String outlet_valve_value;
+	String pump_value;
+	String mode_value;
+	
+	int pump_runtime_value;
+	int pump_stoptime_value;
+	
+	public String getInletValveValue(){
+		return inlet_valve_value;
+	}
+	
+	public String getOutletValveValue(){
+		return outlet_valve_value;		
+	}
+	
+	public String getPumpValue(){
+		return pump_value;				
+	}
+	
+	public String getSysteModeValue(){
+		System.out.println("getSysteModeValue   "+mode_value);
+		return mode_value;						
+	}
+	
+	public int [] getPumpTimeValues(){
+		return new int[]{pump_runtime_value,pump_stoptime_value};
+	}	
+	
+	public void refreshSystemStatus() throws AdsException, DeviceTypeException{
+		
+			inlet_valve_value  = getControlStatus("actuator.valve", 1);
+
+			outlet_valve_value  = getControlStatus("actuator.valve", 2);
+			pump_value  = getControlStatus("actuator.pump", 1); 
+			
+			 
+			
+			pump_runtime_value = getAttribute("attribute.pump.runtime");
+			pump_stoptime_value =  getAttribute("attribute.pump.stoptime");
+			
+			mode_value  = getMode("config.system.mode"); 
+		
+	}
 	
 	
 	
 	/*************** Test  *************/	
 	
-	public void test() throws AdsException{
+	public void test1() throws AdsException{
 
 		try {
 			this.setControl(  "actuator.pump",  1,   OnOffActuatorConstant.Command.ON);
@@ -287,8 +345,6 @@ public class HydroponicsSystem extends BaseSystem{
 			e.printStackTrace();
 		}
 		
-		this.setMode("config.mode",HydroponicsConstant.ModeCommand.AUTOMATIC);
-		this.getMode("config.mode");
 		
 	}
 

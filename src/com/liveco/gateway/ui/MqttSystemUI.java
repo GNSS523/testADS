@@ -17,22 +17,21 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.liveco.gateway.constant.CO2SystemConstant;
 import com.liveco.gateway.mqtt.MqttAdapter;
 import com.liveco.gateway.mqtt.MqttAdapterConfiguration;
 import com.liveco.gateway.mqtt.MqttCommandCallback;
+import com.liveco.gateway.system.CO2System;
 import com.liveco.gateway.system.SystemRepository;
 
 
 public class MqttSystemUI  extends JPanel{
+	
+    private static final Logger LOG = LogManager.getLogger(MqttSystemUI.class);
 
-	
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	MqttAdapterConfiguration configuration;
 	MqttAdapter adapter; 

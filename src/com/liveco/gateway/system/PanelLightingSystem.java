@@ -16,6 +16,8 @@ public class PanelLightingSystem extends BaseSystem{
     private static final Logger LOG = LogManager.getLogger(PanelLightingSystem.class);
 	
 	public static final SystemStructure type = SystemStructure.PANEL_LIGHTING_SYSTEM;
+	
+	public int values [] = new int[5];
 			
 	public PanelLightingSystem(ADSConnection ads, int index, String system_id){
 		super(ads,index, system_id);
@@ -29,11 +31,9 @@ public class PanelLightingSystem extends BaseSystem{
 		super(ads,index, system_id,base_address,array);
 	}	
 	
-
 	public byte getTableFieldOffset(String type){
 		return PanelLightingConstant.Table.getOffset(type);
 	}	
-
 	
 	/***************  Panel lighting Control on one single channel 
 	 * 
@@ -41,51 +41,57 @@ public class PanelLightingSystem extends BaseSystem{
 	 * getIntensityOnColor("GREEN",60)
 	 * 
 	 * *************/	
+	public String getType(){
+		return SystemStructure.PANEL_LIGHTING_SYSTEM.name();
+	}
+	
 	public void setIntensityOnColor(String type,int value) throws AdsException, DeviceTypeException{
-		if(value <=0) value = 0;
-		else if(value >=0 ) value = 100;
+		if(value <0) value = 0;
+		else if(value >100 ) value = 100;
 		
-		if(type !="RED" || type !="GREEN" || type !="BLUE" || type !="FAR_RED" || type !="GREEN"){
-			throw new DeviceTypeException("");
-		}
+        //System.out.println("setIntensityOnColor "+value);
+		
 		byte[] values = { (byte)value };
 		this.accessDeviceControl( type , values);
 	}
 	
 	public int getIntensityOnColor(String type) throws AdsException, DeviceTypeException{
-		
-		if(type !="RED" || type !="GREEN" || type !="BLUE" || type !="FAR_RED" || type !="GREEN"){
-			throw new DeviceTypeException("");
-		}
+		/**/
 		return (int)this.accessDeviceStatus(type)[0];
 		
 	}
 	
 	/***************  Panel lighting Control on all the channels 
 	 * 
-	 * setIntensityOnColor(40，50，60，70，80)
+	 * setIntensityOnColor(40锛�50锛�60锛�70锛�80)
 	 * getIntensityOnColor()
 	 * 
 	 * *************/	
 	public void setLightIntensity(int red, int blue, int green, int far_red, int uv) throws AdsException, DeviceTypeException{
 	
-		setIntensityOnColor("RED",red);
-		setIntensityOnColor("BLUE",blue);
-		setIntensityOnColor("GREEN",green);
-		setIntensityOnColor("FAR_RED",far_red);
-		setIntensityOnColor("GREEN",uv);
+		setIntensityOnColor("actuator.panel_led.red",red);
+		setIntensityOnColor("actuator.panel_led.blue",blue);
+		setIntensityOnColor("actuator.panel_led.green",green);
+		setIntensityOnColor("actuator.panel_led.far_red",far_red);
+		setIntensityOnColor("actuator.panel_led.uv",uv);
 		
 	}
 
-	public void getLightIntensity() throws AdsException, DeviceTypeException{
+	public int[] getLightIntensity() throws AdsException, DeviceTypeException{
 		
-		int red = getIntensityOnColor("RED");
-		int blue = getIntensityOnColor("BLUE");
-		int green = getIntensityOnColor("GREEN");
-		int far_red = getIntensityOnColor("FAR_RED");
-		int uv = getIntensityOnColor("uv");
+		int red = getIntensityOnColor("actuator.panel_led.red");
+		int blue = getIntensityOnColor("actuator.panel_led.blue");
+		int green = getIntensityOnColor("actuator.panel_led.green");
+		int far_red = getIntensityOnColor("actuator.panel_led.far_red");
+		int uv = getIntensityOnColor("actuator.panel_led.uv");
 		
-		// 组合成json
+		System.out.println("PanelLightingSystem   "+red+"  "+blue+"  "+green+"  "+far_red+"   "+uv);
+		values[0] = red;
+		values[1] =blue;
+		values[2] =green;
+		values[3] =far_red;
+		values[4] =uv;
+		return values;
 		
 	}	
 
@@ -118,8 +124,5 @@ public class PanelLightingSystem extends BaseSystem{
 		}
 		*/
 	}	
-	
-	
-	
 	
 }

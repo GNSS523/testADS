@@ -1,14 +1,11 @@
 package testADS;
-
+import de.beckhoff.jni.tcads.AmsNetId;
 import de.beckhoff.jni.Convert;
 import de.beckhoff.jni.JNIByteBuffer;
 import de.beckhoff.jni.tcads.AmsAddr;
 import de.beckhoff.jni.tcads.AdsCallDllFunction;
 import de.beckhoff.jni.tcads.AdsSymbolEntry;
-import de.beckhoff.jni.tcads.AmsNetId;
 
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -29,22 +26,23 @@ public class Test {
         AmsAddr addr = new AmsAddr();
         System.out.println( addr.getNetId().toString() );
         // Open communication            
-        AdsCallDllFunction.adsPortOpen();
+        long port = AdsCallDllFunction.adsPortOpen();
+        System.out.println("port:"+port);
         
         AmsNetId netid = new AmsNetId();
-        netid.setCharArr("5.42.203.215.1.1".toCharArray());
-        addr.setNetId(netid);
-        
-        err = AdsCallDllFunction.getLocalAddress(addr);
+
         addr.setPort(851);
-        System.out.println("netid:"+AdsCallDllFunction.ADSERR_INV_AMS_NETID +" "+ AdsCallDllFunction.AMSPORT_R0_PLC_RTS1);
+        
+        
+        //err = AdsCallDllFunction.getLocalAddress(addr);
+        err = AdsCallDllFunction.getLocalAddressEx(851, addr);
         if (err != 0) {
             System.out.println("Error: Open communication: 0x"
                     + Long.toHexString(err));
         } else {
             System.out.println("Success: Open communication!");
         }
-        
+        /**/
         return addr;
 	
 	}
@@ -603,6 +601,7 @@ public class Test {
     {
     	
     	AmsAddr addr = Test.open();
+    	//Test.close(addr);
     	//Test.readSymbol( addr , "GVL_HMI.pump");
     	//Test.writeSymbol(addr, "GVL_HMI.pump", (byte)77);
     	
@@ -617,100 +616,54 @@ public class Test {
     	//Test.writeSymbolArray(addr , "GVL_HMI.b",array );	
     	//Test.readArraySymbol(addr,   "GVL_HMI.b", 3);
     	
-    	/*
     	byte array2[] = { (byte)12, (byte)11, (byte)3,(byte)4,(byte)5,(byte)6,(byte)7};
-    	Test.writeSymbolArray(addr , "GVL_HMI.p1",array2 );    	
+    	//Test.writeSymbolArray(addr , "GVL_HMI.p1",array2 );    	
     	Test.readSymbolAndValue(addr, "GVL_HMI.p1",2);
     	
-    	Test.readSymbolAndValue(addr, "GVL_HMI.p1.PumpST",2);
-    	Test.readArraySymbol( addr, "GVL_HMI.p1.aARRAY", 3);
-    	
+    	//Test.readSymbolAndValue(addr, "GVL_HMI.p1.PumpST",2);
+    	//Test.readArraySymbol( addr, "GVL_HMI.p1.aARRAY", 3);
+    	/*
     	Test.close(addr);
 		*/
     	//Test.connectMQTT();
 
  }
- 
+
   
-	   public static void connectMQTT(){
+   public static void connectMQTT(){
 
-		   
-		   
-		    class MqttCommandCallback implements MqttCallback {
+       String topic        = "MQTT Examples";
+       String content      = "Message from MqttPublishSample";
+       int qos             = 2;
+       String broker       = "tcp://iot.eclipse.org:1883";
+       String clientId     = "JavaSample";
+       MemoryPersistence persistence = new MemoryPersistence();
 
-		        private String lastCommand;
-
-		        @Override
-		        public void connectionLost (Throwable arg0)
-		        {
-		        }
-
-		        @Override
-		        public void deliveryComplete (IMqttDeliveryToken arg0)
-		        {
-		        }
-
-		        @Override
-		        public void messageArrived (String topic, MqttMessage message) throws Exception
-		        {
-		        	System.out.println(message.getPayload());
-
-		        }
-
-		        public String getLastCommand ()
-		        {
-		            return lastCommand;
-		        }
-
-		    }		   
-		   
-		   
-		   
-		   
-	       String topic        = "/device/plc/abc/system/hydroponics/1/command";
-	       String content      = "Message from MqttPublishSample";
-	       int qos             = 2;
-	       String broker       = "tcp://139.59.170.74:1883";
-	       String clientId     = "JavaSample";
-	       MemoryPersistence persistence = new MemoryPersistence();
-
-	       try {
-	           MqttClient client = new MqttClient(broker, clientId, persistence);
-	           
-	           MqttConnectOptions options = new MqttConnectOptions();
-	            options.setCleanSession(true);
-	            //options.setUserName(configuration.getMqttUsername());
-	            //options.setPassword(configuration.getMqttPassword().toCharArray());
-	            //options.setWill(configuration.getMqttTopicRoot() + MQTT_TOPIC_ONLINE, "0".getBytes(), 1, true);
-	               
-	     
-	           System.out.println("Connecting to broker: "+broker);
-	           client.connect(options);
-	           System.out.println("Connected");
-	           System.out.println("Publishing message: "+content);
-	           MqttMessage message = new MqttMessage(content.getBytes());
-	           message.setQos(qos);
-	           client.publish(topic, message);
-	           System.out.println("Message published");
-	           
-	           
-	           client.subscribe("/device/plc/abc/system/hydroponics/1/command");
-	           client.subscribe("/device/plc/abc/system/hydroponics/1/command");
-
-	           client.setCallback(new MqttCommandCallback());
-	           //client.disconnect();
-	           //System.out.println("Disconnected");
-	           //System.exit(0);
-	       } catch(MqttException me) {
-	           System.out.println("reason "+me.getReasonCode());
-	           System.out.println("msg "+me.getMessage());
-	           System.out.println("loc "+me.getLocalizedMessage());
-	           System.out.println("cause "+me.getCause());
-	           System.out.println("excep "+me);
-	           me.printStackTrace();
-	       }	   
-		   
-	   } 
+       try {
+           MqttClient sampleClient = new MqttClient(broker, clientId, persistence);
+           MqttConnectOptions connOpts = new MqttConnectOptions();
+           connOpts.setCleanSession(true);
+           System.out.println("Connecting to broker: "+broker);
+           sampleClient.connect(connOpts);
+           System.out.println("Connected");
+           System.out.println("Publishing message: "+content);
+           MqttMessage message = new MqttMessage(content.getBytes());
+           message.setQos(qos);
+           sampleClient.publish(topic, message);
+           System.out.println("Message published");
+           sampleClient.disconnect();
+           System.out.println("Disconnected");
+           System.exit(0);
+       } catch(MqttException me) {
+           System.out.println("reason "+me.getReasonCode());
+           System.out.println("msg "+me.getMessage());
+           System.out.println("loc "+me.getLocalizedMessage());
+           System.out.println("cause "+me.getCause());
+           System.out.println("excep "+me);
+           me.printStackTrace();
+       }	   
+	   
+   } 
     
     
     
@@ -756,7 +709,5 @@ public class Test {
       }	 
       */ 
   }
-  
-  
     
 }

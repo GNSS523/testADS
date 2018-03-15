@@ -23,10 +23,8 @@ END_VAR
 
 
 public enum SystemStructure {
-
 	
-	
-	
+	MAIN("main_system"),
 	SHELF_LIGHTING_SYSTEM("shelf_lighting"),
 	PANEL_LIGHTING_SYSTEM("panel_lighting"),
 	NUTRIENT_SYSTEM("nutrient_system"),
@@ -34,7 +32,8 @@ public enum SystemStructure {
 	AEROPONICS_SYSTEM("aeroponics"),
 	FOGPONICS_SYSTEM("fogponics"),
 	CO2_SYSTEM("co2_system"),
-	AIR_CONDITIONING_SYSTEM("air_conditioning");
+	AIR_CONDITIONING_SYSTEM("air_conditioning"),
+	AIR_CONDITIONING_INNER_SYSTEM("air_conditioning_inner");
 
 	private final String symbol;
 	SystemStructure(String symbol){

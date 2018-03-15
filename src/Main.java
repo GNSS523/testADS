@@ -1,65 +1,132 @@
 import java.util.*;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import java.util.Properties;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import com.liveco.gateway.constant.HydroponicsConstant;
-import com.liveco.gateway.constant.OnOffActuatorConstant;
-import com.liveco.gateway.constant.SystemStructure;
-import com.liveco.gateway.mqtt.MqttAdapter;
-import com.liveco.gateway.mqtt.MqttAdapterConfiguration;
-import com.liveco.gateway.mqtt.MqttCommandCallback;
 import com.liveco.gateway.plc.ADSConnection;
 import com.liveco.gateway.plc.AdsException;
-import com.liveco.gateway.plc.DeviceTypeException;
-import com.liveco.gateway.system.FogponicsSystem;
 import com.liveco.gateway.system.AirConditioner;
-import com.liveco.gateway.system.BaseSystem;
 import com.liveco.gateway.system.CO2System;
-import com.liveco.gateway.system.SystemRepository;
 import com.liveco.gateway.system.HydroponicsSystem;
 import com.liveco.gateway.system.PanelLightingSystem;
 import com.liveco.gateway.system.ShelfLightingSystem;
-
-import com.google.gson.*;
 
 
 import de.beckhoff.jni.tcads.AdsSymbolEntry;
 
 public class Main {
 	
+	public static String symbol = "GVL_HMI";
 
+	ArrayList<HydroponicsSystem> hydroponics = new ArrayList<HydroponicsSystem>();
+	ArrayList<ShelfLightingSystem> shelfLightings = new ArrayList<ShelfLightingSystem>();
+	ArrayList<PanelLightingSystem> panelLightings = new ArrayList<PanelLightingSystem>();
+	ArrayList<AirConditioner> air_conditioners = new ArrayList<AirConditioner>();
+	ArrayList<CO2System> co2s = new ArrayList<CO2System>();
 	
 	ADSConnection ads;
 	
 	Main(){
 		
+		ads = new ADSConnection();
+		ads.openPort(false, null, 851);		
+				
+		//this.scanSubSystem(HydroponicsSystem.type, 3);
+
+		
+	}
+
+	
+	public void scanSubSystem(com.liveco.gateway.constant.SystemStructure system_symbol , int number){
+
+		try {
+			System.out.println(  system_symbol.getSymbol()  );
+			AdsSymbolEntry ads_symbol = ads.readArraySymbol(symbol+"."+system_symbol.getSymbol());
+			int total_size = ads_symbol.getSize();
+			long address = ads_symbol.getiOffs();
+			byte []byte_array = ads.readSymbolByteArray(ads_symbol,total_size );
+			
+			System.out.println("scanSubSystem "+address+"  "+byte_array);
+			for(int i = 0; i<byte_array.length;i++){
+				System.out.print(byte_array[i]+"  ");
+			}
+			System.out.println();
+			
+			switch(system_symbol) {
+				
+				case HYDROPONICS:
+					for(int i = 0 ; i< number ; i++){
+						int data_length = HydroponicsSystem.data_length;
+						HydroponicsSystem system = new HydroponicsSystem(ads,	
+																		 i,HydroponicsSystem.type+"_"+i,
+								                                         address+i*data_length,
+								                                         Arrays.copyOfRange(byte_array, i*data_length, (i+1)*data_length)
+								                                         );
+						//hydroponics.add(system);
+						//system.test(system.getByteArray());
+						//system.accessDeviceControl("actuator.pump",1,OnOffCommand.ON);
+						//system.accessDeviceControl("actuator.valve",2,OnOffCommand.ON);
+						//System.out.println(  "status :" +  system.accessDeviceStatus2("actuator.pump",1,OnOffCommand.ON)   );
+						//System.out.println(  "status :" +  system.accessDeviceStatus2("actuator.valve",2,OnOffCommand.ON)   );
+						//System.out.println(data_length);
+						system.test(system.readByteArray( data_length));
+					}
+	
+				break;
+				
+
+				
+				case AIR_CONDITIONING_SYSTEM:
+					for(int i = 0 ; i < 4; i++){
+						AirConditioner a = new AirConditioner(ads,i,"H1");
+						air_conditioners.add(i, a);
+					}
+				break;
+				
+				case CO2_SYSTEM:
+					for(int i = 0 ; i < 4; i++){
+						CO2System a = new CO2System(ads,i,"H1");
+						co2s.add(i, a);
+					}
+				break;
+				
+				case SHELF_LIGHTING_SYSTEM:
+					for(int i = 0 ; i < 4; i++){
+						ShelfLightingSystem a = new ShelfLightingSystem(ads,i,"H1");
+						shelfLightings.add(i, a);
+					}
+				break;
+				
+				case PANEL_LIGHTING_SYSTEM:
+					for(int i = 0 ; i < 4; i++){
+						PanelLightingSystem a = new PanelLightingSystem(ads,i,"H1");
+						panelLightings.add(i, a);
+					}
+				break;
+			}			
+			
+			
+		} catch (AdsException e) {
+			
+			e.printStackTrace();
+		}		
+		
+
 	}
 	
-	public ADSConnection openConnection(){
-		ads = new ADSConnection();
-		ads.openPort(false,"5.42.203.215.1.1",851);	
-		return ads;
-	}
+
+
+	
+	
+	public void configMode(byte mode){
 		
+	}
+	
+	public byte getMode(){
+		return (byte)1;
+	}	
+	
 	
 	public void test(){
 				
-		this.openConnection();
-		
     	byte array2[] = { (byte)12, (byte)11, (byte)3,(byte)4,(byte)5,(byte)6,(byte)7};
     	try {
 			ads.writeSymbolByteArray("GVL_HMI.p1",array2 );
@@ -81,69 +148,8 @@ public class Main {
 
 	}    	
 
-	
-		
     public static void main(String[] args)
-    { 
-	   Logger logger = Logger.getLogger("com.liveco.gateway");
-	   logger.setLevel(Level.DEBUG);    	
-    	
-    	System.out.println("hello world");
-    	Main main = new Main();
-    	//ADSConnection ads = main.openConnection();
-    	
-    	
-    	HydroponicsSystem a = new HydroponicsSystem(null,0,"af" );
-    	System.out.println( a.getTableOffset() );
-    	a.test111();
-    	
+    {    	
 
-/*    	
-        File configFile = new File(configFileName);
-
-        if ( !configFile.exists() ) {
-            System.err.println(String.format("The specified config file (%s) does not exist", configFileName));
-            System.err.println();
-            System.exit(2);
-            return;
-        }
-
-        Properties properties = new Properties();
-        try (InputStream in = new FileInputStream(configFile)) {
-            properties.load(in);
-        }
-        catch (IOException ex) {
-            System.err.println(ex.getMessage());
-            System.err.println(String.format("Was not able to load the properties file (%s)", configFileName));
-            System.err.println();
-        }
-
-        MqttAdapterConfiguration config = new MqttAdapterConfiguration();
-        config.setIndegoBaseUrl(properties.getProperty("indego.mqtt.device.base-url"));
-        config.setIndegoUsername(properties.getProperty("indego.mqtt.device.username"));
-        config.setIndegoPassword(properties.getProperty("indego.mqtt.device.password"));
-        config.setMqttBroker(properties.getProperty("indego.mqtt.broker.connection"));
-        config.setMqttClientId(properties.getProperty("indego.mqtt.broker.client-id"));
-        config.setMqttUsername(properties.getProperty("indego.mqtt.broker.username"));
-        config.setMqttPassword(properties.getProperty("indego.mqtt.broker.password"));
-        config.setMqttTopicRoot(properties.getProperty("indego.mqtt.broker.topic-root"));
-        config.setPollingIntervalMs(Integer.parseInt(properties.getProperty("indego.mqtt.polling-interval-ms")));    	
-    	
-*/    	
-    	
-    	SystemRepository system = new SystemRepository();
-    	
-    	MqttAdapterConfiguration configuration = new MqttAdapterConfiguration();
-    	configuration.setMqttBroker("tcp://139.59.170.74:1883");
-    	configuration.setMqttClientId("JavaSample");
-    	MqttAdapter adapter = new MqttAdapter(configuration, new MqttCommandCallback(system));
-    	adapter.startup();
-
-    	
-    	//System.out.println(   );
-    	//main.openConnection();
-    	//main.scanSystems();
-    	//main.test();  
-    	//System.out.println( AirConditionerCommand.OFF.getValue() +"   "+ AirConditionerCommand.getValue("ON" ) );
     }
 }

@@ -27,8 +27,15 @@ public class ShelfLightingSystem extends BaseSystem{
 	
 	public ShelfLightingSystem(ADSConnection ads, int index, String system_id, long base_address, byte array[]){
 		super(ads,index, system_id,base_address,array);
+		number =  this.getByteArray().length;
 	}
+
+	public String getType(){
+		return SystemStructure.SHELF_LIGHTING_SYSTEM.name();
+	}	
 	
+	// light number
+	int number = 0;
 
 	/***************  Panel lighting Control on all the channels 
 	 * 
@@ -36,12 +43,19 @@ public class ShelfLightingSystem extends BaseSystem{
 	 * close(0)
 	 * 
 	 * *************/
-	public void open(int index) throws AdsException, DeviceTypeException{
+	public void open(int index) throws AdsException{
 		this.setControl( index, OnOffActuatorConstant.Command.ON);
 	}
 	
-	public void close(int index) throws AdsException, DeviceTypeException{
-		this.setControl(index, OnOffActuatorConstant.Command.OFF);
+	
+	/**
+	 *  can't use OnOffActuatorConstant.Command.OFF, since OnOffActuatorConstant.Command.OFF == 2, so we use just 0 as the OFF command
+	 * @param index
+	 * @throws AdsException
+	 * @throws DeviceTypeException
+	 */
+	public void close(int index) throws AdsException{
+		this.setControl(index, new byte[]{0});
 	}
 	
 	// controlSimpleDevice("actuator.pump",1,OnOffActuatorConstant.Command.ON )
@@ -49,7 +63,38 @@ public class ShelfLightingSystem extends BaseSystem{
 		this.accessDeviceControl(index, command);
 	}
 	
+	private void setControl(int index, byte []command) throws AdsException{
+		this.accessDeviceControl(index, command);
+	}	
 	
+	public byte[] getLightingStatus(){
+		number =  this.getByteArray().length;
+		return this.getByteArray();
+	}
+	
+	public byte getLightDriverStatus(int index){
+		return this.getByteArray()[index];
+	}
+	
+	public int getLightNumber(){
+		return number;
+	}
+	
+	/*******************   Mode control
+	 * @throws AdsException
+	 */
+	
+	public void controlAllOn() throws AdsException{
+		for (int i=0;i<number;i++){
+			open(i);
+		}
+	}
+	
+	public void controlAllOff() throws AdsException{
+		for (int i=0;i<number;i++){
+			close(i);
+		}		
+	}
 	
 	/***************  Light Control and Status 
 	 * 

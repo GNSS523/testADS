@@ -1,20 +1,18 @@
 package com.liveco.gateway.system;
 
-import com.liveco.gateway.constant.HydroponicsConstant;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import com.liveco.gateway.constant.ICommand;
 import com.liveco.gateway.mqtt.MqttCommand;
 import com.liveco.gateway.plc.ADSConnection;
 import com.liveco.gateway.plc.AdsException;
-import com.liveco.gateway.plc.AdsListener;
 import com.liveco.gateway.plc.DeviceTypeException;
 
-import de.beckhoff.jni.AdsConstants;
-import de.beckhoff.jni.JNILong;
-import de.beckhoff.jni.tcads.AdsCallDllFunction;
-import de.beckhoff.jni.tcads.AdsCallbackObject;
-import de.beckhoff.jni.tcads.AdsNotificationAttrib;
-
 public class BaseSystem {
+
+    private static final Logger LOG = LogManager.getLogger(BaseSystem.class);
+	
 	
 	protected ADSConnection ads;
 	private String system_id;
@@ -83,13 +81,25 @@ public class BaseSystem {
 	}	
 	
 	public void test(byte test_array[]){
-		System.out.println("address : "+base_address);
+		LOG.debug("-----------------------");
+		LOG.debug("address : "+base_address);
 		for(int i = 0; i<test_array.length;i++){
 			System.out.print(test_array[i]+"  ");
 		}
-		System.out.println();
-		System.out.println("-----------------------");
+		System.out.println("  ");
+		LOG.debug("-----------------------");
 	}
+
+	public void test(){
+		LOG.debug("-----------------------");
+		LOG.debug("address : "+base_address);
+		for(int i = 0; i<byte_array.length;i++){
+			System.out.print(byte_array[i]+"  ");
+		}
+		System.out.println("  ");
+		
+		LOG.debug("-----------------------");
+	}	
 	
 	public byte[] readByteArray( int buffersize) throws AdsException{
 		
@@ -141,6 +151,7 @@ public class BaseSystem {
 	
 	public long getSensorAddress(String type, int id) throws AdsException{
 		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(type, id);
+		LOG.debug("getSensorAddress   " +address+"    "+(long)this.getTableFieldOffset(type, id));
 		return address;
 	}
 	
@@ -148,6 +159,7 @@ public class BaseSystem {
 	/*  access device  */
 	public void accessDeviceControl(String type, int id, ICommand command ) throws AdsException{
 		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(type, id);
+		System.out.println(this.getBaseAddress() + "  "+(long)this.getTableFieldOffset(type, id)+"  "+command.getValue());
 		byte values[] = {command.getValue()};
 		this.writeByteArray(address, values);	
 	}
@@ -157,11 +169,20 @@ public class BaseSystem {
 		this.writeByteArray(address, values);
 	}
 
+	// applied for the pumb or valve control (through ICommand)
 	public void accessDeviceControl(int offset, ICommand command ) throws AdsException{
 		long address = this.getBaseAddress() + offset;
 		byte values[] = {command.getValue()};
+		LOG.debug("accessDeviceControl    "+values[0]);
 		this.writeByteArray(address, values);
 	}
+	
+	// applied for the LED tube lighting
+	public void accessDeviceControl(int offset, byte values[] ) throws AdsException{
+		long address = this.getBaseAddress() + offset;
+		LOG.debug("accessDeviceControl    "+values[0]);
+		this.writeByteArray(address, values);
+	}	
 	
 	
 	public byte[] accessDeviceStatus(String type, int id) throws AdsException{
@@ -170,7 +191,7 @@ public class BaseSystem {
 	}	
 
 	public byte[] accessDeviceStatus(String type) throws AdsException{
-		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(type) + 1;
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(type);
 		return this.readByteArray(address, 1);
 	}	
 	
@@ -187,47 +208,62 @@ public class BaseSystem {
 	 */
 	public void configMode(String name, ICommand command) throws AdsException{
 		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(name);
-		byte values[] = {command.getValue()};
+		byte values[] = {command.getValue()};		
+		LOG.debug("configMode   :"+this.getBaseAddress() + "  "+(long)this.getTableFieldOffset(name)+"  "+command.getValue());		
 		this.writeByteArray(address, values);
 	}
 	
-	public byte[] getModeStatus(String name, int numberOfBytes) throws AdsException{
-		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(name) + 1;
+	public byte[] getModeStatus(String name, int numberOfBytes, int offset) throws AdsException{
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(name) + offset;
+		System.out.println("get mode status   "+  (long)this.getTableFieldOffset(name)   +"   "+this.getBaseAddress()+"   "+address );
 		return this.readByteArray(address, numberOfBytes);		
 	}
+	
+	
+	
 	
 	/*
 	 *   "config.attr"
 	 */
-	public void configAttribute(String name, int value){
-		long address = this.getBaseAddress() + (long)HydroponicsConstant.Table.getOffset(name);
-		long number = this.getBaseAddress() + (long)HydroponicsConstant.Table.getNumber(name);
-		
+	public void configAttribute(String name, byte values[]) throws AdsException{
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(name);
+		long number =(long)this.getTableFieldNumberOfByte(name);
+		this.writeByteArray(address, values);
 	}
 
-	public int getAttributedStatus(String name){
-		long address = this.getBaseAddress() + (long)HydroponicsConstant.Table.getOffset(name) + 1;
-		long number = this.getBaseAddress() + (long)HydroponicsConstant.Table.getNumber(name);
-		return 0;	
+	public byte[] getAttributedStatus(String name) throws AdsException{		
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(name);
+		long number =(long)this.getTableFieldNumberOfByte(name);		
+		//System.out.println("getAttributedStatus   "+name+"    "+number);
+		return this.readByteArray(address, (int)number);
 	}	
 	
-	public int getAttributedStatus(String name, int offset){
-		long address = this.getBaseAddress() + (long)HydroponicsConstant.Table.getOffset(name) + offset;
-		long number = this.getBaseAddress() + (long)HydroponicsConstant.Table.getNumber(name);
-		return 0;	
+	public byte[] getAttributedStatus(String name, int numberOfBytes) throws AdsException{
+		long address = this.getBaseAddress() + (long)this.getTableFieldOffset(name);
+		System.out.println( this.getTableFieldOffset(name)  + "   "+name);
+		int number = numberOfBytes;
+		return this.readByteArray(address, number);			
 	}	
 	
 
-	
+	public byte[] getRawArray(int begin, int numberOfBytes) throws AdsException{
+		long address = this.getBaseAddress() + begin ;
+		int number = numberOfBytes;
+		return this.readByteArray(address, number);			
+	}		
 	
 	public void parseCommand(MqttCommand webcommand) throws AdsException, DeviceTypeException{
 
-		System.out.println("basesystem parseCommand");
+		LOG.debug("basesystem parseCommand");
 	}
 	
 	public void parseState(MqttCommand webcommand) throws AdsException, DeviceTypeException{
-		System.out.println("basesystem parseState");
+		LOG.debug("basesystem parseState");
 
+	}	
+	
+	public String getType(){
+		return "";
 	}	
 	
 }

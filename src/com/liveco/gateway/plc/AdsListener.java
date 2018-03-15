@@ -22,8 +22,15 @@ public class AdsListener implements CallbackListenerAdsState {
         // Convert to millisecs and substract span.
         Date notificationDate = new Date(dateInMillis / 10000 - SPAN);
 
+        byte data [] = notification.getData();
+        
         System.out.println("Value:\t\t"
-                + Convert.ByteArrToInt(notification.getData()));
+                + Convert.ByteArrToFloat(notification.getData())+"    "+notification.getData().length+ "   "+ data[0]+"  "+data[1]+"  "+data[2]+"  "+data[3]);
+        
+        
+
+        
+        
         System.out.println("Notification:\t" + notification.getHNotification());
         System.out.println("Time:\t\t" + notificationDate.toString());
         System.out.println("User:\t\t" + user);

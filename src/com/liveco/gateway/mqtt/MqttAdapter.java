@@ -12,6 +12,7 @@ import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import com.google.gson.Gson;
+import com.liveco.gateway.system.AirConditioner;
 import com.liveco.gateway.system.BaseSystem;
 import com.liveco.gateway.system.FogponicsSystem;
 
@@ -23,6 +24,8 @@ import java.util.regex.Pattern;
 
 public class MqttAdapter {
 
+	
+	
     public static final String MQTT_TOPIC_COMMAND = "command";
 
     public static final String MQTT_TOPIC_ONLINE = "online";

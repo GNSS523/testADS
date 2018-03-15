@@ -1,7 +1,13 @@
-package com.liveco.gateway.constant;
+ package com.liveco.gateway.constant;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
+
+import com.liveco.gateway.constant.FogponicsConstant.ModeCommand;
+import com.liveco.gateway.constant.FogponicsConstant.ModeState;
+import com.liveco.gateway.constant.FogponicsConstant.Table;
+import com.liveco.gateway.constant.FogponicsConstant.WaterLevelState;
 
 public class HydroponicsConstant extends IrrigationSystemConstant{
 	
@@ -10,17 +16,18 @@ public class HydroponicsConstant extends IrrigationSystemConstant{
 		/*
 TYPE ST_SingleCircSysInterface :
 STRUCT
-	stPump:ST_PumpOrValueInterfacs;
-	stSVIn:ST_PumpOrValueInterfacs;
-	stSVOut:ST_PumpOrValueInterfacs;
+	stPump:ST_PumpOrValueInterfacs; 2
+	stSVIn:ST_PumpOrValueInterfacs; 2
+	stSVOut:ST_PumpOrValueInterfacs; 2
 	
-	byHMICmd:BYTE;          //Cmd:=1_Manual;=2_Config;=4_Work;=8_Clean Up;=16_Fill in；=32_check
+	byHMICmd:BYTE;          //Cmd:=1_Manual;=2_Config;=4_Work;=8_Clean Up;=16_Fill in锛�=32_check 
 	byHMIStatus:BYTE;       //Status:=1_Manual;=2_Config;=4_Work;=8_Clean up;=16_Fill in;=32_check
+	
 	byWaterTankLevel:BYTE; //bit 3=1:HH(highest level);bit 2:H(high level);bit 1:L(low level);bit 0(lowwest level)
 	byRequestFill:BYTE;    //=1 request
 	byAgreeFill:BYTE;      //=1 agree
-	iPumpRunTime:INT;      //minute
-	iPumpStopTime:INT;     //minute
+	iPumpRunTime:INT;      //minute  2 INT
+	iPumpStopTime:INT;     //minute  
 END_STRUCT
 END_TYPE
 		 */	
@@ -28,12 +35,17 @@ END_TYPE
 		PUMP(                  (byte)0, (byte)2,  "actuator.pump",    "pump"    , (byte)1),
 		VALVE_IN(              (byte)2, (byte)2 , "actuator.valve",   "in valve", (byte)1),
 		VALVE_OUT(             (byte)4, (byte)2,  "actuator.valve",   "out valve", (byte)2),
-		LEVEL_SENSOR(          (byte)6, (byte)1,  "sensor.water_level_sensor",   "sensor.water_level_sensor", (byte)1 ),
 		
-		CONFIG_MODE(           (byte)8, (byte)2,  "config.system.mode"   ,   "config the mode ", (byte)-1),
-		RPC_FILL_WATER(          (byte)10, (byte)2, "rpc.fill_water"  ,    "command to fill in the tank", (byte)-1),
-		CONFIG_PUMP_RUN_TIME(  (byte)12, (byte)4, "attribute.pump.time.run" ,"config the run time for the pump", (byte)-1),
-		CONFIG_PUMP_STOP_TIME( (byte)16, (byte)4, "attribute.pump.time.stop","config the stop time for the pump", (byte)-1 );
+		CONFIG_MODE(           (byte)6, (byte)2,  "config.system.mode"   ,   "config the mode ", (byte)-1),
+		
+		LEVEL_SENSOR(          (byte)8, (byte)1,  "sensor.water_level_sensor",   "sensor.water_level_sensor", (byte)1 ),
+		
+		RPC_FILL_WATER(          (byte)9, (byte)2, "rpc.fill_water"  ,    "command to fill in the tank", (byte)-1),
+		
+		CONFIG_PUMP_RUN_TIME(  (byte)12, (byte)2, "attribute.pump.runtime" ,"config the run time for the pump", (byte)-1),
+		CONFIG_PUMP_STOP_TIME( (byte)14, (byte)2, "attribute.pump.stoptime","config the stop time for the pump", (byte)-1 ),
+		CONFIG_PUMP_ELAPSED_RUN_TIME(  (byte)16, (byte)2, "attribute.pump.elasped_runtime" ,"config the run time for the pump", (byte)-1),
+		CONFIG_PUMP_ELAPSED_STOP_TIME( (byte)18, (byte)2, "attribute.pump.elapsed_stoptime","config the stop time for the pump", (byte)-1 )	;	
 		
 		
 		
@@ -116,17 +128,25 @@ END_TYPE
 			}		
 			return total;
 		}	
+		
+		public static Vector<String> getConstantVector(){
+	        Vector<String> vs = new Vector<String>();
+	        for(Table ads : Table.values()){
+	        	vs.add(ads.name());
+	        }
+	        return vs;
+		}		
 	}
 	
 	
 	public enum ModeCommand  implements ICommand{
 
 		MANUAL((byte)1, "MANUAL"),
-		SEMI_AUTOMATIC((byte)2, "SEMI_AUTOMATIC"),
-		AUTOMATIC((byte)4,"AUTOMATIC"),
-		CIRCULATE((byte)8,"CIRCULATE"),
-		INLET((byte)16,"INLET"),
-		OUTLET((byte)32,"OUTLET");
+		CONFIG((byte)2, "CONFIG"),
+		RUNNING((byte)4,"RUNNING"),
+		CLEANUP((byte)8,"CLEANUP"),
+		FILLIN((byte)16,"FILLIN"),
+		CHECK((byte)32,"CHECK");
 		
 		private final byte value;
 		private final String descritpion;
@@ -155,7 +175,15 @@ END_TYPE
 
 		public static byte getValue(String name){
 			return lookup.get(name).getValue();
-		}			
+		}	
+		
+		public static Vector<String> getConstantVector(){
+	        Vector<String> vs = new Vector<String>();
+	        for(ModeCommand ads : ModeCommand.values()){
+	        	vs.add(ads.name());
+	        }
+	        return vs;
+		}		
 		
 	}
 	
@@ -163,11 +191,11 @@ END_TYPE
 	public enum ModeState {
 		
 		MANUAL((byte)1, "MANUAL"),
-		SEMI_AUTOMATIC((byte)2, "SEMI_AUTOMATIC"),
-		AUTOMATIC((byte)4,"AUTOMATIC"),
-		CIRCULATE((byte)8,"CIRCULATE"),
-		INLET((byte)16,"INLET"),
-		OUTLET((byte)32,"OUTLET");
+		CONFIG((byte)2, "CONFIG"),
+		RUNNING((byte)4,"RUNNING"),
+		CLEANUP((byte)8,"CLEANUP"),
+		FILLIN((byte)16,"FILLIN"),
+		CHECK((byte)32,"CHECK");
 		
 		private final byte value;
 		private final String descritpion;
@@ -197,8 +225,20 @@ END_TYPE
 		}
 
 		public static String getName(byte value){
-			return lookup.get(value).name();
+			ModeState state = get(value);
+			if(state == null) {
+				throw new java.lang.NullPointerException("HydroponicsConstant ModeState can't find name by value "+value);
+			} 
+			return get(value).name();
 		}
+		
+		public static Vector<String> getConstantVector(){
+	        Vector<String> vs = new Vector<String>();
+	        for(ModeState ads : ModeState.values()){
+	        	vs.add(ads.name());
+	        }
+	        return vs;
+		}		
 	}
 
 	
@@ -237,6 +277,14 @@ END_TYPE
 		public static byte getValue(String name){
 			return lookup.get(name).getValue();
 		}	
+		
+		public static Vector<String> getConstantVector(){
+	        Vector<String> vs = new Vector<String>();
+	        for(FillInCommand ads : FillInCommand.values()){
+	        	vs.add(ads.name());
+	        }
+	        return vs;
+		}			
 	}	
 
 	public enum FillInStatus {
@@ -274,16 +322,26 @@ END_TYPE
 		public static String getName(Byte name){
 			return lookup.get(name).name();
 		}	
+		
+	
+
+		public static Vector<String> getConstantVector(){
+	        Vector<String> vs = new Vector<String>();
+	        for(FillInStatus ads : FillInStatus.values()){
+	        	vs.add(ads.name());
+	        }
+	        return vs;
+		}			
 	}	
 	
 	
 	
 	public enum WaterLevelState{
 		
-		HH((byte)3, "HH"),
-		H((byte)2, "H"),
-		L((byte)1,"LL"),
-		LL((byte)0,"L");
+		HH((byte)15, "HH"),
+		H((byte)7, "H"),
+		L((byte)3,"LL"),
+		LL((byte)1,"L");;
 		
 		private final byte value;
 		private final String descritpion;
@@ -314,7 +372,16 @@ END_TYPE
 
 		public static String getName(byte value){
 			return lookup.get(value).name();
-		}		
+		}
+		
+		public static Vector<String> getConstantVector(){
+	        Vector<String> vs = new Vector<String>();
+	        for(WaterLevelState ads : WaterLevelState.values()){
+	        	vs.add(ads.name());
+	        }
+	        return vs;
+		}
+		
 	}	
 
 }

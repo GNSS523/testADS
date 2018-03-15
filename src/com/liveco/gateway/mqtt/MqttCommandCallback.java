@@ -7,6 +7,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.google.gson.Gson;
+import com.liveco.gateway.constant.SystemStructure;
 import com.liveco.gateway.system.BaseSystem;
 import com.liveco.gateway.system.SystemRepository;
 
@@ -63,7 +64,7 @@ public class MqttCommandCallback implements MqttCallback {
     	MqttCommand webcommand = this.parseContent(message);
     	BaseSystem system;
     	try{
-    		system = this.system_repository.findSystem(system_type, Integer.parseInt(system_id));
+    		system = this.system_repository.findSystem(SystemStructure.HYDROPONICS, Integer.parseInt(system_id));
     		
         	if(command_type.equals("command")){
         		system.parseCommand(webcommand);

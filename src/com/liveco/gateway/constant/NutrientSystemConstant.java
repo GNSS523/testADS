@@ -9,42 +9,53 @@ public class NutrientSystemConstant {
 	public enum Table{
 
 		/*
-TYPE ST_Config :
-STRUCT
-	stRecipe:ST_LiquorRecipe;
-	stActual:ST_LiquorActual;
-	stPump:ST_PumpOrValueInterfacs;
-	stSV1:ST_PumpOrValueInterfacs;
-	stSV2:ST_PumpOrValueInterfacs;
-	stSV3:ST_PumpOrValueInterfacs;
-	stSV4:ST_PumpOrValueInterfacs;
-	stSV5:ST_PumpOrValueInterfacs;
-	stSV6:ST_PumpOrValueInterfacs;
-	stUGL1:ST_PumpOrValueInterfacs;
-	iConfigModeCmd	:INT;	//ConfigMode:=1Manual;=2Half Auto;=4:Auto
-	iConfigModeStatus:INT;	//ConfigMode:=1Manual;=2Half Auto;=4Auto
-	iConfigCommand:INT;//config Cmd：1-start config；2-stop；4-config OK
-	iConfigStatus:INT;//config status：1-ready；2-config run；4-config complete；8-config OK;16-trans；32-trans complete
-	byMeterPumpCmd	:BYTE;	//Meter Pump Cmd:=1_power on;=2_power off
-	byMeterPumpStatus	:BYTE;	//Meter Pump Status:=1_Power on
-	rPHActualValue	:REAL;	//PH actual value
-    rECActualValue	:REAL;	//EC actual value
-    rPEActualValue	:REAL;	//PE actual value
-	rPHCheckActualValue	:REAL;	//Check complete:PH  Actual Value
-    rECCheckActualValue	:REAL;	//Check complete:EC  Actual Value
-END_STRUCT
-END_TYPE
+		TYPE ST_Config :
+		STRUCT
+			stPump:ST_PumpOrValueInterfacs;
+			stSV1:ST_PumpOrValueInterfacs;
+			stSV2:ST_PumpOrValueInterfacs;
+			stSV3:ST_PumpOrValueInterfacs;
+			stSV4:ST_PumpOrValueInterfacs;
+			stSV5:ST_PumpOrValueInterfacs;
+			stSV6:ST_PumpOrValueInterfacs;
+			stUGL1:ST_PumpOrValueInterfacs;
+			iConfigModeCmd	:INT;	//ConfigMode:=1Manual;=2Half Auto;=4:Auto
+			iConfigModeStatus:INT;	//ConfigMode:=1Manual;=2Half Auto;=4Auto
+			iConfigCommand:INT;//config Cmd锛�1-start config锛�2-stop锛�4-config OK
+			iConfigStatus:INT;//config status锛�1-ready锛�2-config run锛�4-config complete锛�8-config OK;16-trans锛�32-trans complete
+				byMeterPumpCmd	:BYTE;	//Meter Pump Cmd:=1_power on;=2_power off
+				byMeterPumpStatus	:BYTE;	//Meter Pump Status:=1_Power on
+			rPHActualValue	:REAL;	//PH actual value
+		    rECActualValue	:REAL;	//EC actual value
+		    rPEActualValue	:REAL;	//PE actual value
+			rPHCheckActualValue	:REAL;	//Check complete:PH  Actual Value
+		    rECCheckActualValue	:REAL;	//Check complete:EC  Actual Value
+		    stRecipe:ST_LiquorRecipe;
+			stActual:ST_LiquorActual;
+		END_STRUCT
+		END_TYPE
 		 */	
 		
-		PUMP(                  (byte)0, (byte)2,  "actuator.pump",    "pump"    , (byte)1),
-		VALVE_IN(              (byte)2, (byte)2 , "actuator.valve",   "in valve", (byte)1),
-		VALVE_OUT(             (byte)4, (byte)2,  "actuator.valve",   "out valve", (byte)2),
-		LEVEL_SENSOR(          (byte)6, (byte)1,  "sensor.water_level_sensor",   "sensor.water_level_sensor", (byte)1 ),
+		PUMP(                  (byte)0, (byte)2,  "actuator.pump",    "pump"    ,                                  (byte)1),
+		VALVE_IN_TANK(         (byte)2, (byte)2 , "actuator.valve",   "VALVE_IN_TANK",                             (byte)1),
+		VALVE_IN_TEST_CLEAN(   (byte)4, (byte)2,  "actuator.valve",   "VALVE_IN_TEST_CLEAN",                       (byte)2),
+		VALVE_OUT_TANK(        (byte)6, (byte)2,  "actuator.valve",   "VALVE_OUT_TANK",                            (byte)3 ),
+		VALVE_IN_TEST(         (byte)8, (byte)2,  "actuator.valve",   "VALVE_IN_TEST",                             (byte)4 ),
+		VALVE_OUT_WASTE(       (byte)10, (byte)2,  "actuator.valve",   "VALVE_OUT_WASTE",                          (byte)5 ),
+		VALVE_OUT_GROWING(     (byte)12, (byte)2,  "actuator.valve",   "VALVE_OUT_GROWING",                        (byte)6 ),
+		UV_LED(                (byte)14, (byte)2,  "actuator.uv_led",   "UV_LED",                                   (byte)1 ),
+		METER_PUMP(            (byte)16, (byte)2,  "actuator.meter_pump",   "METER_PUMP",                          (byte)1 ),
 		
-		CONFIG_MODE(           (byte)8, (byte)2,  "config.mode"   ,   "config the mode ", (byte)-1),
-		COMMAND_FILL(          (byte)10, (byte)2, "command.fill"  ,    "command to fill in the tank", (byte)-1),
-		CONFIG_PUMP_RUN_TIME(  (byte)12, (byte)4, "attribute.pump.time.run" ,"config the run time for the pump", (byte)-1),
-		CONFIG_PUMP_STOP_TIME( (byte)16, (byte)4, "attribute.attr.pump.time.stop","config the stop time for the pump", (byte)-1 );
+		CONFIG_MODE_SET(           (byte)18, (byte)2,  "config.system.mode.set"   ,   "config the mode ",                     (byte)-1),
+		CONFIG_MODE_GET(           (byte)20, (byte)2,  "config.system.mode.get"   ,   "config the mode ",                     (byte)-1),
+		COMMAND_FILL_SET(          (byte)22, (byte)2, "command.fill.set"  ,    "command to fill in the tank",          (byte)-1),
+		COMMAND_FILL_GET(          (byte)24, (byte)2, "command.fill.get"  ,    "command to fill in the tank",          (byte)-1),
+				
+		PHActualValue(         (byte)26, (byte)4, "sensor.PH"  ,    "PHActualValue",                           (byte)1),
+		ECActualValue(         (byte)30, (byte)4, "sensor.EC"  ,    "ECActualValue",                           (byte)1),
+		PEActualValue(         (byte)34, (byte)4, "sensor.PE"  ,    "PEActualValue",                           (byte)1),		
+		COMMAND_PH(            (byte)38, (byte)4, "attribute.PH"  ,    "COMMAND_PH",                             (byte)-1),
+		COMMAND_EC(            (byte)42, (byte)4, "attribute.EC"  ,    "COMMAND_EC",                             (byte)-1);
 		
 		
 		
@@ -209,7 +220,7 @@ END_TYPE
 	}	
 	
     /*
-     *  混液模式
+     *  娣锋恫妯″紡
      */
 	
 	public enum MixingCommand implements ICommand{
@@ -292,7 +303,7 @@ END_TYPE
 	}
 
     /*
-     *  补液模式
+     *  琛ユ恫妯″紡
      */	
 	
 	public enum FillInCommand implements ICommand{
@@ -375,11 +386,16 @@ END_TYPE
 		public static byte getValue(Byte name){
 			return lookup.get(name).getValue();
 		}	
+
+		public static String getName(Byte name){
+			return lookup.get(name).name();
+		}
+	
 	}	
 	
 	
     /*
-     *  检测模式
+     *  妫�娴嬫ā寮�
 	
 	public enum  TABLE{
 		

@@ -8,9 +8,16 @@ import de.beckhoff.jni.JNILong;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+
 import de.beckhoff.jni.tcads.*;
 public class ADSConnection {
 
+    private static final Logger LOG = LogManager.getLogger(ADSConnection.class);
+	
+	
 	private static final int BUFFERSIZE_BOOLEAN = 1;
 	private static final int BUFFERSIZE_INT = 1;
 	private static final int BUFFERSIZE_FLOAT = 4;
@@ -45,24 +52,24 @@ public class ADSConnection {
 	
 	public long openPort(boolean localNetAddr, String txtNetString, int Prt) {
 		
-          System.out.println("openport "+localNetAddr+"  "+txtNetString+" "+Prt);
+		  LOG.info("openport "+localNetAddr+"  "+txtNetString+" "+Prt);
 	
 	      if (port == 0) {
 	        AdsVersion lAdsVersion = AdsCallDllFunction.adsGetDllVersion();
-	        System.out.println("AdsVersion: " + new Integer(lAdsVersion.getVersion())
+	        LOG.debug("AdsVersion: " + new Integer(lAdsVersion.getVersion())
 	                           + "." + new Integer(lAdsVersion.getRevision())
 	                           + "." + lAdsVersion.getBuild());
 
 	        port = AdsCallDllFunction.adsPortOpen();
-
+	        // real PLC
 	        if (localNetAddr == true) {
 	          this.netId = txtNetString;
 	          addr.setNetIdString(txtNetString);
-	        }
+	        }// computer simulator
 	        else {
 	          long nErr = AdsCallDllFunction.getLocalAddress(addr); //local netid
 	          if (nErr != 0) {
-	            System.out.println("getLocalAddress() failed with " + nErr);
+	        	  LOG.error("getLocalAddress() failed with " + nErr);
 	            AdsCallDllFunction.adsPortClose();
 	            return 0;
 	          }
@@ -80,10 +87,10 @@ public class ADSConnection {
         // Close communication
         err = AdsCallDllFunction.adsPortClose();
         if(err!=0) { 
-            System.out.println("Error: Close Communication: 0x" + Long.toHexString(err)); 
+        	 LOG.error("Error: Close Communication: 0x" + Long.toHexString(err)); 
                     
         }else{
-        	System.out.println("close successfully");
+        	 LOG.info("close successfully");
         }		
 		
 	}	
@@ -119,7 +126,9 @@ public class ADSConnection {
 	
         JNIByteBuffer handleBuff = new JNIByteBuffer(0xFFFF);
         JNIByteBuffer symbolBuff = new JNIByteBuffer(Convert.StringToByteArr(symbol,true));
-                
+        
+        LOG.debug("readArraySymbol    "+symbol);
+        
         long err, err1;        
         // Get handle by symbol name
         err = AdsCallDllFunction.adsSyncReadWriteReq( addr,
@@ -133,12 +142,12 @@ public class ADSConnection {
         AdsSymbolEntry adsSymbolEntry = new AdsSymbolEntry(handleBuff.getByteArray());
                 
         // Write information to stdout
-        System.out.println("Name:\t\t"+ adsSymbolEntry.getName());                            
-        System.out.println("Index Group:\t" + adsSymbolEntry.getiGroup());                           
-        System.out.println("Index Offset:\t"+ adsSymbolEntry.getiOffs());                            
-        System.out.println("Size:\t\t" + adsSymbolEntry.getSize());                           
-        System.out.println("Type:\t\t"+ adsSymbolEntry.getType());                           
-        System.out.println("Comment:\t"+ adsSymbolEntry.getComment());		
+        LOG.debug("Name:\t\t"+ adsSymbolEntry.getName());                            
+        LOG.debug("Index Group:\t" + adsSymbolEntry.getiGroup());                           
+        LOG.debug("Index Offset:\t"+ adsSymbolEntry.getiOffs());                            
+        LOG.debug("Size:\t\t" + adsSymbolEntry.getSize());                           
+        LOG.debug("Type:\t\t"+ adsSymbolEntry.getType());                           
+        LOG.debug("Comment:\t"+ adsSymbolEntry.getComment());		
                 
         // Release handle
         err1 = AdsCallDllFunction.adsSyncWriteReq( addr,
@@ -180,12 +189,12 @@ public class ADSConnection {
         AdsSymbolEntry adsSymbolEntry = new AdsSymbolEntry(handleBuff.getByteArray());
                 
         // Write information to stdout
-        System.out.println("Name:\t\t"+ adsSymbolEntry.getName());                            
-        System.out.println("Index Group:\t" + adsSymbolEntry.getiGroup());                           
-        System.out.println("Index Offset:\t"+ adsSymbolEntry.getiOffs());                            
-        System.out.println("Size:\t\t" + adsSymbolEntry.getSize());                           
-        System.out.println("Type:\t\t"+ adsSymbolEntry.getType());                           
-        System.out.println("Comment:\t"+ adsSymbolEntry.getComment());		
+        LOG.debug("Name:\t\t"+ adsSymbolEntry.getName());                            
+        LOG.debug("Index Group:\t" + adsSymbolEntry.getiGroup());                           
+        LOG.debug("Index Offset:\t"+ adsSymbolEntry.getiOffs());                            
+        LOG.debug("Size:\t\t" + adsSymbolEntry.getSize());                           
+        LOG.debug("Type:\t\t"+ adsSymbolEntry.getType());                           
+        LOG.debug("Comment:\t"+ adsSymbolEntry.getComment());		
                                    
         // Release handle
         err1 = AdsCallDllFunction.adsSyncWriteReq( addr,
@@ -195,10 +204,10 @@ public class ADSConnection {
                 handleBuff);
 
         if(err1!=0) {
-            System.out.println("Error: Release Handle: 0x"+ Long.toHexString(err));
+        	 LOG.error("Error: Release Handle: 0x"+ Long.toHexString(err));
                     
         } else {
-            System.out.println("Success: Release Handle!");
+        	 LOG.info("Success: Release Handle!");
         }
 
         if(err!=0){
@@ -222,12 +231,12 @@ public class ADSConnection {
         
         if(err!=0)
         {
-            System.out.println("Error: Read by handle: 0x" + Long.toHexString(err)); 
+        	LOG.error("Error: Read by handle: 0x" + Long.toHexString(err)); 
             throw new AdsException((int)err);
         }
         else
         {
-        	System.out.println("get used bytes   "+dataBuff.getUsedBytesCount());         
+        	 LOG.debug("get used bytes   "+dataBuff.getUsedBytesCount());         
         }        
         
         byte bytearray[] = dataBuff.getByteArray();
@@ -252,12 +261,12 @@ public class ADSConnection {
         
         if(err!=0)
         {
-            System.out.println("Error: Read by handle: 0x" + Long.toHexString(err)); 
+        	 LOG.error("Error: Read by handle: 0x" + Long.toHexString(err)); 
             throw new AdsException((int)err);
         }
         else
         {
-        	System.out.println("get used bytes   "+dataBuff.getUsedBytesCount());         
+        	 LOG.debug("get used bytes   "+dataBuff.getUsedBytesCount());         
         }        
         
         byte bytearray[] = dataBuff.getByteArray();
@@ -285,12 +294,12 @@ public class ADSConnection {
         
         if(err!=0)
         {
-            System.out.println("Error: write by handle: 0x" + Long.toHexString(err));                            
+        	 LOG.error("Error: write by handle: 0x" + Long.toHexString(err));                            
             throw new AdsException((int)err);
         }
         else
         {
-            System.out.println("successfully write by handle: 0x" + Long.toHexString(err));
+        	 LOG.debug("successfully write by handle: 0x" + Long.toHexString(err));
         }
     
 	}	
@@ -315,12 +324,12 @@ public class ADSConnection {
         
         if(err!=0)
         {
-            System.out.println("Error: write by handle: 0x" + Long.toHexString(err));                            
+        	LOG.error("Error: write by handle: 0x" + Long.toHexString(err));                            
             throw new AdsException((int)err);
         }
         else
         {
-            System.out.println("successfully write by handle: 0x" + Long.toHexString(err));
+        	 LOG.debug("successfully write by handle: 0x" + Long.toHexString(err));
         }
     
 	}	
@@ -345,10 +354,10 @@ public class ADSConnection {
         byteArr = handleBuff.getByteArray();
         symHandle = Convert.ByteArrToInt(byteArr);        
         if(nErr!=0) { 
-            System.out.println("Error: Get handle: 0x"+ Long.toHexString(nErr));                     
+        	LOG.error("Error: Get handle: 0x"+ Long.toHexString(nErr));                     
             throw new AdsException((int)nErr);
         } else {
-            System.out.println("Success: Get handle!"+symHandle);
+        	 LOG.debug("Success: Get handle!"+symHandle);
         }       
               
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -369,12 +378,12 @@ public class ADSConnection {
         if(nErr == 0)
         {
           Integer integerVal = new Integer(intVal);
-          System.out.println("Write by Symbol success : " + integerVal);
+          LOG.debug("Write by Symbol success : " + integerVal);
           
         }
         else
         {
-        	System.out.println("Write by Symbol error : " + nErr);        	
+        	LOG.error("Write by Symbol error : " + nErr);        	
             throw new AdsException((int)nErr);
         }		
 	}	
@@ -401,9 +410,9 @@ public class ADSConnection {
         int hdlBuffToInt = Convert.ByteArrToInt(handleBuff.getByteArray());
         
         if(err!=0) { 
-            System.out.println("Error: Get handle: 0x"+ Long.toHexString(err));               
+        	LOG.error("Error: Get handle: 0x"+ Long.toHexString(err));               
         } else {
-            System.out.println("Success: Get handle!, "+hdlBuffToInt);
+        	 LOG.debug("Success: Get handle!, "+hdlBuffToInt);
         }		
         // Read value by handle
         err = AdsCallDllFunction.adsSyncReadReq( addr,
@@ -413,7 +422,7 @@ public class ADSConnection {
                                             dataBuff);
         if(err!=0)
         {
-            System.out.println("Error: Read by handle: 0x" + Long.toHexString(err));                             
+        	LOG.error("Error: Read by handle: 0x" + Long.toHexString(err));                             
             throw new AdsException((int)err);
 
         }
@@ -421,7 +430,7 @@ public class ADSConnection {
         {
             // Data: byte[] to int
             int intVal = Convert.ByteArrToInt(dataBuff.getByteArray());
-            System.out.println("Success: PLCVar value: " + intVal);
+            LOG.debug("Success: PLCVar value: " + intVal);
         }
 
         // Release handle
@@ -432,11 +441,11 @@ public class ADSConnection {
                 handleBuff);
 
         if(err!=0) {
-            System.out.println("Error: Release Handle: 0x"+ Long.toHexString(err));
+        	LOG.error("Error: Release Handle: 0x"+ Long.toHexString(err));
             throw new AdsException((int)err);
                    
         } else {
-            System.out.println("Success: Release Handle!");
+        	 LOG.debug("Success: Release Handle!");
         }		
 	}	
 	
@@ -452,10 +461,10 @@ public class ADSConnection {
 	        err = AdsCallDllFunction.adsSyncWriteReq(addr, 0x4020, address ,databuff.getUsedBytesCount(), databuff);
 	                        
 	        if(err == 0){      
-	          System.out.println("Write by Symbol success : " );
+	        	LOG.debug("Write by Symbol success : " );
 	        }
 	        else{
-	          System.out.println("Write by Symbol error : " + err);
+	        	LOG.error("Write by Symbol error : " + err);
 	          throw new AdsException((int)err);	          
 	        }		  
 	
@@ -478,7 +487,7 @@ public class ADSConnection {
             return databuff.getByteArray();        
         }
         else{
-          System.out.println("Write by Symbol error : " + err);
+        	 LOG.error("Write by Symbol error : " + err);
           throw new AdsException((int)err);
         }	 
 		        
@@ -503,7 +512,7 @@ public class ADSConnection {
             42,         // Choose arbitrary number
             notification);
         if(err!=0) { 
-            System.out.println("Error: Add notification: 0x"  + Long.toHexString(err));
+        	LOG.error("Error: Add notification: 0x"  + Long.toHexString(err));
             throw new AdsException((int)err);       
         }		
 	}
@@ -515,14 +524,9 @@ public class ADSConnection {
                 addr,
                 notification);
         if(err!=0) { 
-            System.out.println("Error: Remove notification: 0x"
+        	LOG.error("Error: Remove notification: 0x"
                     + Long.toHexString(err)); 
-        }
-
-
-		
+        }		
 	}
 
-	
-	
 }

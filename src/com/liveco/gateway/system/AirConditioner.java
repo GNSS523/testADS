@@ -4,9 +4,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.liveco.gateway.constant.AirConditionerConstant;
-import com.liveco.gateway.constant.HydroponicsConstant;
 import com.liveco.gateway.constant.ICommand;
-import com.liveco.gateway.constant.OnOffActuatorConstant;
 import com.liveco.gateway.constant.SystemStructure;
 import com.liveco.gateway.mqtt.MqttCommand;
 import com.liveco.gateway.plc.ADSConnection;
@@ -14,6 +12,7 @@ import com.liveco.gateway.plc.AdsException;
 import com.liveco.gateway.plc.AdsListener;
 import com.liveco.gateway.plc.DeviceTypeException;
 
+import de.beckhoff.jni.Convert;
 import de.beckhoff.jni.JNILong;
 import de.beckhoff.jni.tcads.AdsCallbackObject;
 
@@ -23,7 +22,9 @@ public class AirConditioner extends BaseSystem{
 
 	public static final SystemStructure type = SystemStructure.AIR_CONDITIONING_SYSTEM;
 	
-	public static int data_length = AirConditionerConstant.Table.getTotalLength();
+	public static int control_data_length = AirConditionerConstant.ControlTable.getTotalLength();
+	public static int status_data_length = AirConditionerConstant.StatusTable.getTotalLength();
+
 	
 	public AirConditioner(ADSConnection ads, int index, String system_id){
 		super(ads,index, system_id);
@@ -37,19 +38,23 @@ public class AirConditioner extends BaseSystem{
 		super(ads,index, system_id,base_address,array);
 	}
 
-
+	public String getType(){
+		return SystemStructure.AIR_CONDITIONING_SYSTEM.name();
+	}
+	
+	
 	
 	public byte getTableFieldOffset(String type, int id){
-		return AirConditionerConstant.Table.getOffset(type,id);
+		return AirConditionerConstant.ControlTable.getOffset(type,id);
 	}
 	
 	public byte getTableFieldOffset(String name){
-		return AirConditionerConstant.Table.getOffset(name);
+		return AirConditionerConstant.ControlTable.getOffset(name);
 	}	
 	
 	public byte getTableFieldNumberOfByte(String name){
-		return AirConditionerConstant.Table.getNumber(name);
-	}	
+		return AirConditionerConstant.ControlTable.getNumber(name);
+	}		
 	
 	/***************  Pump, Valve Control and Status 
 	 * 
@@ -121,29 +126,11 @@ public class AirConditioner extends BaseSystem{
 	
 	
 	
-	public void open(String type) throws AdsException{
-		this.setControl(type, AirConditionerConstant.Command.ON);
-	}
-	
-	public void close(String type) throws AdsException{
-		this.setControl(type, AirConditionerConstant.Command.OFF);
-	}
+	/* 	
 
-	public void setHot(String type) throws AdsException{
-		this.setControl(type, AirConditionerConstant.Command.HOT);
-	}
-	
-	public void setCold(String type) throws AdsException{
-		this.setControl(type, AirConditionerConstant.Command.COLD);
-	}	
-	
-	public void getStatus(){
-		
-	}
-	
-	/*   
+  
 	     
-	 */
+
 	private void setControl(String name, AirConditionerConstant.Command command) throws AdsException{
 		long address = this.getBaseAddress() + (long)AirConditionerConstant.Table.getOffset(name);
 		byte values[] = {command.getValue()};
@@ -154,10 +141,10 @@ public class AirConditioner extends BaseSystem{
 		long address = this.getBaseAddress() + (long)AirConditionerConstant.Table.getOffset(name) + 1;
 		return this.readByteArray(address, 1)[0];		
 	}
-	
+	 */	
 	/*
 	 * 
-	 */
+
 	public void setTemperature(String name, int value) throws AdsException{
 		long address = this.getBaseAddress() + (long)AirConditionerConstant.Table.getOffset(name);
 		long number = this.getBaseAddress() + (long)AirConditionerConstant.Table.getNumber(name);
@@ -169,6 +156,48 @@ public class AirConditioner extends BaseSystem{
 		long number = this.getBaseAddress() + (long)AirConditionerConstant.Table.getNumber(name);
 		return 0;	
 	}	
+	
+	
+	 */	
+
+	public void setWorkMode(String name, AirConditionerConstant.WorkCommand command) throws AdsException{
+		long address = this.getBaseAddress() + (long)AirConditionerConstant.ControlTable.getOffset(name);
+		byte values[] = {command.getValue()};
+		System.out.println(".....................................setWorkMode   "+ this.getBaseAddress()+ "     " +address+"    "+name+"    "+values[0]);
+		this.writeByteArray(address, values);
+	}
+	
+	public void setOperationMode(String name, AirConditionerConstant.OperationCommand command) throws AdsException{
+		long address = this.getBaseAddress() + (long)AirConditionerConstant.ControlTable.getOffset(name);
+		byte values[] = {command.getValue()};
+		this.writeByteArray(address, values);
+	}	
+
+	public void setFanMode(String name, AirConditionerConstant.FanCommand command) throws AdsException{
+		long address = this.getBaseAddress() + (long)AirConditionerConstant.ControlTable.getOffset(name);
+		byte values[] = {command.getValue()};
+		System.out.println(".....................................setFanMode   "+ this.getBaseAddress()+ "     " +address+"    "+name+"    "+values[0]);
+		this.writeByteArray(address, values);
+	}
+	
+	public void setTemperature(String name, int temp) throws AdsException{
+		long address = this.getBaseAddress() + (long)AirConditionerConstant.ControlTable.getOffset(name);
+		//byte values[] = temp.;
+		//this.writeByteArray(address, values);
+	}	
+	
+	public float getWorkMode() throws AdsException, DeviceTypeException{
+		byte values[]= this.getRawArray(4,2);
+		LOG.debug("getWorkMode   "+ values[0]+ " "+ values[1]+"   "+ "   " +"    "+Convert.ByteArrToFloat(values) );
+		return Convert.ByteArrToFloat(values);
+	}	
+	
+	public float getFanMode() throws AdsException, DeviceTypeException{
+		byte values[]= this.getRawArray(6,2);
+		LOG.debug("getFanMode   "+ values[0]+ " "+ values[1]+"   "+"   " +"    "+Convert.ByteArrToFloat(values) );
+		return Convert.ByteArrToFloat(values);
+	}		
+	
 	
 	
 	/*  notification  */
@@ -190,18 +219,9 @@ public class AirConditioner extends BaseSystem{
 	}	
 	
 	
-	public void test() throws AdsException{
+	public void test1() throws AdsException{
 
-		this.setControl(  "config.mode",  AirConditionerConstant.Command.ON);
 
-		this.setControl(  "config.mode",  AirConditionerConstant.Command.HOT);
-
-		this.getControlStatus("config.mode");
-		
-		//this.setTemperature();
-		
-		//this.getTemperature();
-		
 		
 	}
 	
